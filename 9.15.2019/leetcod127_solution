@@ -1,0 +1,63 @@
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Set<String> diction = new HashSet<>();
+        for(String word: wordList){
+            diction.add(word);
+        }
+        
+        if(beginWord.equals(endWord)){
+            return 1;
+        }
+        
+        HashSet<String> hash = new HashSet<String>();
+        Queue<String> queue = new LinkedList<String>();
+        queue.offer(beginWord);
+        hash.add(beginWord);
+        
+        int length=1;
+        while(!queue.isEmpty()){
+            length++;
+            int size = queue.size();
+            for(int i=0;i<size;i++){
+                String word = queue.poll();
+                for(String nextWord: getNextWords(word,diction)){
+                    if(hash.contains(nextWord)){
+                        continue;
+                    }
+                    if(nextWord.equals(endWord)){
+                        return length;
+                    }
+                    hash.add(nextWord);
+                    queue.offer(nextWord);
+                }
+            }
+        }
+        
+        return 0;
+    }
+    
+    private ArrayList<String> getNextWords(String word, Set<String> diction){
+        ArrayList<String> nextWords=new ArrayList<String>();
+        for(char i='a';i<='z';i++){
+            for(int j=0;j<word.length();j++){
+                if(i==word.charAt(j)){
+                    continue;
+                }
+                
+                String nextWord = replace(word,i,j);
+                if(diction.contains(nextWord)){
+                    nextWords.add(nextWord);
+                }
+            }
+        }
+        
+        return nextWords;
+    }
+    
+    private String replace(String word, char i, int index){
+        char[] sc = word.toCharArray();
+        
+        sc[index]=i;
+        return new String(sc);
+    }
+}
