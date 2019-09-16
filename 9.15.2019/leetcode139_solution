@@ -1,0 +1,47 @@
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if(s==null || s.length()==0){
+            return false;
+        }
+        
+        Set<String> set = new HashSet<String>();
+        
+        int maxlength=0;
+        for(String word:wordDict){
+            maxlength=Math.max(maxlength,word.length());
+            set.add(word);
+        }
+        
+        boolean[] segment = new boolean[s.length()+1];
+        
+        segment[0]=true;
+        for(int i=1;i<=s.length();i++){
+            segment[i]=false;
+            for(int lastWordLength=1;lastWordLength<=maxlength && lastWordLength<=i;lastWordLength++){
+                if(!segment[i-lastWordLength]){
+                    continue;
+                }
+                
+                String word = s.substring(i-lastWordLength,i);
+                if(set.contains(word)){
+                    segment[i]=true;
+                    break;
+                }
+            }
+        }
+        
+        if(segment[s.length()]){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    // private int getMaxLength(List<String> wordDict){
+    //     int maxlength=0;
+    //     for(String word: wordDict){
+    //         maxlength=Math.max(maxlength,word.length());
+    //     }
+    //     return maxlength;
+    // }
+}
