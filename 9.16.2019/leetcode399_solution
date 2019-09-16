@@ -1,0 +1,71 @@
+class Solution {
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        int size = queries.size();
+        int length = equations.size();
+        double[] results = new double[size];
+        if(queries==null){
+            return results;
+        }
+        
+        Map<String, Map<String, Double>> map = new HashMap<>();
+        
+        
+        for(int i=0;i<length;i++){
+            addMap(map,equations.get(i).get(0),equations.get(i).get(1),values[i]);
+            addMap(map,equations.get(i).get(1),equations.get(i).get(0),1/values[i]);
+        }
+        
+        
+        
+        for(int i=0;i<size;i++){
+            results[i]=getValue(map,queries.get(i).get(0),queries.get(i).get(1));
+        }
+        
+        return results;
+    }
+    
+    private double getValue(Map<String, Map<String, Double>> map, String startString, String endString){
+        if(map.get(startString)==null || map.get(endString)==null){
+            return -1.0;
+        }
+        
+        Map<String,Double> submap = new HashMap<>();
+        Queue<String> queue = new LinkedList<>();
+        Set<String> valid = new HashSet<>();
+        
+        queue.offer(startString);
+        valid.add(startString);
+        submap.put(startString,1.0);
+        
+        String current,next;
+        while(!queue.isEmpty()){
+            current=queue.remove();
+            for(Map.Entry<String,Double> set: map.get(current).entrySet()){
+                next = set.getKey();
+                submap.put(next,submap.get(current) * set.getValue());
+                if(next.equals(endString)){
+                    return submap.get(endString);
+                }else if(!valid.contains(next)){
+                    queue.offer(next);
+                    valid.add(next);
+                }
+            }
+        }
+        
+        return -1.0;
+    }
+    
+    private void addMap(Map<String, Map<String, Double>> map, String startString, String endString, double values){
+        Map<String,Double> submap = new HashMap<>();
+        
+        if(map.containsKey(startString)){
+            submap=map.get(startString);
+        }else{
+            submap=new HashMap<String,Double>();
+        }
+        
+        submap.put(endString, values);
+        map.put(startString,submap);
+        
+    }
+}
