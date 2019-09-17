@@ -1,0 +1,39 @@
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(nums==null || nums.length==0){
+            return new int[0];
+        }
+        int length = nums.length - k +1;
+        
+        int max=findMax(nums,0,k);
+        
+        int[] result = new int[length];
+        result[0]=max;
+        for(int i=1;i<length;i++){
+            if(max==nums[i-1]){
+                max=findMax(nums,i,k);
+                result[i]=max;
+            }else{
+                if(max>=nums[i+k-1]){
+                    result[i]=max;
+                }else{
+                    max=nums[i+k-1];
+                    result[i]=nums[i+k-1];
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    private int findMax(int[] nums, int start, int length){
+        int max = nums[start];
+        
+        for(int i=1;i<length;i++){
+            
+            max=(nums[start+i]>max)?nums[start+i]:max;
+        }
+        
+        return max;
+    }
+}
