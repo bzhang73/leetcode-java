@@ -1,0 +1,41 @@
+class Solution {
+    public int thirdMax(int[] nums) {
+        if(nums==null ||nums.length==0){
+            return -1;
+        }
+        
+        if(nums.length==1){
+            return nums[0];
+        }
+        
+        if(nums.length==2){
+            return (nums[0]>nums[1])?nums[0]:nums[1];
+        }
+        
+        // int[] result = {nums[0],nums[1],nums[2]};
+        Arrays.sort(nums);
+        
+        int[] result = new int[3];
+        result[2]=nums[nums.length-1];
+        int temp=2;
+        int length=nums.length-2;
+        while(temp>=0 && length>=0){
+            // System.out.println(length);
+            if(nums[length]!=nums[length+1]){
+                temp=temp-1;
+                result[temp] = nums[length];
+                if(temp==0){
+                    return result[temp];
+                }
+            }
+            length--;
+            // System.out.println(temp);
+        }
+        
+        if(temp>0){
+            return result[2];
+        }
+        
+        return result[temp];
+    }
+}
