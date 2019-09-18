@@ -1,0 +1,34 @@
+class Solution {
+    public int maxNumberOfBalloons(String text) {
+        char[] sc = text.toCharArray();
+        int numa=0;
+        int numb=0;
+        int numl=0;
+        int numn=0;
+        int numo=0;
+        Arrays.sort(sc);
+        for(int i=0;i<sc.length;i++){
+            if(sc[i]=='a'){
+                numa++;
+            }else if(sc[i]=='b'){
+                numb++;
+            }else if(sc[i]=='l'){
+                numl++;
+            }else if(sc[i]=='n'){
+                numn++;
+            }else if(sc[i]=='o'){
+                numo++;
+            }
+        }
+        
+        int result=0;
+        numo/=2;
+        numl/=2;
+        result=(numa<numb)?numa:numb;
+        result=(result<numl)?result:numl;
+        result=(result<numn)?result:numn;
+        result=(result<numo)?result:numo;
+        
+        return result;
+    }
+}
