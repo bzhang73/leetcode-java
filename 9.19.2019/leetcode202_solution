@@ -1,0 +1,41 @@
+class Solution {
+    public boolean isHappy(int n) {
+        int sum = 0;
+        while(n>0){
+            sum+= (n%10)*(n%10);
+            n/=10;
+        }
+        
+        if(sum==1){
+            return true;
+        }
+        
+        if(sum==n){
+            return false;
+        }
+        
+        Set<Integer> set = new HashSet<Integer>();
+        set.add(n);
+        set.add(sum);
+        while(sum!=1){
+            int temp=sum;
+            sum=0;
+            while(temp>0){
+                sum+=(temp%10)*(temp%10);
+                temp/=10;
+                // System.out.println(temp);
+            }
+            
+            if(sum==1)
+                break;
+            
+            if(set.contains(sum)){
+                return false;
+            }else{
+                set.add(sum);
+            }
+        }
+        
+        return true;
+    }
+}
