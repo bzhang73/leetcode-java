@@ -1,0 +1,30 @@
+class Solution {
+    public int reverse(int x) {
+        char[] sc = Integer.toString(x).toCharArray();
+        StringBuilder sb =new StringBuilder();
+        
+        try{
+            if(sc[0]=='-'){
+                newInteger(sc,1,sc.length-1);
+            }else{
+                newInteger(sc,0,sc.length-1);
+            }
+            return Integer.valueOf(sb.append(sc).toString());
+        }catch(Exception e){
+            return 0;
+        }
+    }
+    
+    private void newInteger(char[] sc, int i, int j){
+        while(i<j){
+            swap(sc,i++,j--);
+        }
+    } 
+    
+    private void swap(char[] sc, int i,int j){
+        char temp = sc[i];
+        sc[i] = sc[j];
+        sc[j] = temp;
+    }
+    
+}
