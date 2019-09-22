@@ -1,0 +1,28 @@
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+         Objects.requireNonNull(intervals);
+        int n = intervals.length;
+        if (n < 2) return n;
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+        // maps meeting end time to number meetings
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        int roomCount = 0;
+        for (int[] meeting : intervals) {
+            int start = meeting[0];
+            int end = meeting[1];
+            Map.Entry<Integer, Integer> room = map.floorEntry(start);
+            if (room == null) {
+                roomCount++;
+            } else {
+                int m = room.getValue();
+                if (m > 1) {
+                    map.replace(room.getKey(), m - 1);
+                } else {
+                    map.remove(room.getKey());
+                }
+            }
+            map.merge(end, 1, (a, b) -> a + b);
+        }
+        return roomCount;
+    }
+}
