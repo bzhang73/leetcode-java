@@ -1,0 +1,47 @@
+class Solution {
+    class Point{
+        int x;
+        int y;
+        
+        public Point(int x, int y){
+            this.x=x;
+            this.y=y;
+        }
+    }
+    
+    public int[][] kClosest(int[][] points, int K) {
+        int[][] results = new int[K][2];
+        if(points==null || points[0].length==0){
+            return results;
+        }
+        
+        int rank = points.length;
+        Map<Integer,List<Point>> map = new HashMap<>();
+        
+        int[] sort= new int[rank];
+        
+        for(int i=0;i<rank;i++){
+            sort[i] = points[i][0]*points[i][0] + points[i][1]*points[i][1];
+            Point point = new Point(points[i][0],points[i][1]);
+            map.putIfAbsent(sort[i],new ArrayList<>());
+            map.get(sort[i]).add(point);
+        }
+
+        Arrays.sort(sort);
+        
+        for(int i=0;i<K;i++){
+            List<Point> list = map.get(sort[i]);
+            int time=0;
+            for(Point point: list){
+                if(i+time>=K)
+                    return results;
+                results[i+time][0]=point.x;
+                results[i+time][1]=point.y;
+                time++;
+            }
+            i=i+time-1;
+        }
+        
+        return results;
+    }
+}
