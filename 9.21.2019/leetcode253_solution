@@ -1,0 +1,16 @@
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        TreeMap<Integer,Integer> map = new TreeMap<>(); 
+        for(int [] a : intervals){
+            map.put(a[0],map.getOrDefault(a[0],0)+1); // Add a room at this starting time
+            map.put(a[1],map.getOrDefault(a[1],0)-1);// Remove a room at this ending time
+        }
+        int local =0; 
+        int max =0; 
+        for(int i : map.values()){
+            local = local+i;
+            max = Math.max(max,local);
+        }
+        return max;
+    }
+}
