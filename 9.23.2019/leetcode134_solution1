@@ -1,0 +1,38 @@
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int[][] results = new int[gas.length][1];
+        Queue<Integer> queue = new LinkedList<Integer>();
+        
+        for(int i=0;i<gas.length;i++){
+            results[i][0]=gas[i]-cost[i];
+            if(results[i][0]>=0)
+                queue.add(i);
+        }
+        
+        if(gas.length==1)
+            return (!queue.isEmpty())?queue.poll():-1;
+        
+        int time=1;
+        int result=-1;
+        while(time<gas.length && !queue.isEmpty()){
+            int size = queue.size();
+            for(int i=0;i<size;i++){
+                int temp=queue.poll();
+                int gasgas = temp+time;
+                if(gasgas>=gas.length)
+                    gasgas=gasgas-gas.length;
+                results[temp][0] = results[temp][0]+gas[gasgas]-cost[gasgas];
+                if(results[temp][0]>=0){
+                    queue.add(temp);
+                    result=temp;
+                }
+            }
+            time++;
+        }
+        if(time==gas.length && result>-1){
+            return (results[result][0]>=0)?result:-1;
+        }else{
+            return -1;
+        }
+    }
+}
