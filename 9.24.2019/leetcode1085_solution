@@ -1,0 +1,22 @@
+class Solution {
+    public int sumOfDigits(int[] A) {
+        if(A==null || A.length<1)
+            return -1;
+        int min = A[0];
+        
+        for(int i=0;i<A.length;i++)
+            if(A[i]<min)
+                min=A[i];
+        
+        return getResult(min)%2;
+    }
+    
+    private int getResult(int n){
+        int sum=0;
+        while(n!=0){
+            sum+=n%10;
+            n/=10;
+        }
+        return sum+1;
+    }
+}
