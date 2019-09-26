@@ -1,0 +1,30 @@
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        StringBuilder sb = new StringBuilder();
+        List<String> results = new ArrayList<String>();
+        char[] sc = new char[2*n];
+        generate(results,sb,n,n);
+        return results;
+    }
+    
+    private void generate(List<String> results, StringBuilder sb, int left,int right){
+        if(left==0 && right==0){
+            results.add(sb.toString());
+            return ;
+        }
+            
+        if(left>right || left<0 || right<0)
+            return;
+        
+        if(left>0){
+            sb.append('(');
+            generate(results,sb,left-1,right);
+            sb.setLength(sb.length()-1);
+        }
+        if(right>0){
+            sb.append(')');
+            generate(results,sb,left,right-1);
+            sb.setLength(sb.length()-1);
+        }
+    }
+}
