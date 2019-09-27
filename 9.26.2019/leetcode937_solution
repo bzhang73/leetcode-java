@@ -1,0 +1,60 @@
+class Solution {
+    public String[] reorderLogFiles(String[] logs) {
+        Map<String,Stack<String>> map = new HashMap<>();
+        ArrayList<String> array = new ArrayList<>();
+        ArrayList<String> number = new ArrayList<>();
+        
+        for(int i=0;i<logs.length;i++){
+            for(int j=0;j<logs[i].length();j++){
+                if(logs[i].charAt(j)==' '){
+                    String substring = logs[i].substring(0,j);
+                    String key = logs[i].substring(j+1,logs[i].length());
+                    
+                    
+                    if(key.charAt(0)>='0' && key.charAt(0)<='9'){
+                        number.add(key);
+                    }else{
+                        array.add(key);
+                    }
+                    if(map.containsKey(key)){
+                        Stack<String> stack = map.get(key);
+                        stack.push(substring);
+                        map.put(key,stack);
+                        
+                    }else{
+                        Stack<String> stack = new Stack<String>();
+                        stack.push(substring);
+                        map.put(key,stack);
+                    }
+                    
+                    
+                    break;
+                }
+            }
+        }
+        
+        String[] results = new String[logs.length];
+        Collections.sort(array);
+        int i=0;
+        
+        
+        for(;i<array.size();i++){
+            String key = array.get(i);
+            Stack<String> stack = map.get(key);
+            StringBuilder sb = new StringBuilder(stack.pop());
+            sb.append(" ");
+            sb.append(key);
+            // System.out.println(i);
+            results[i]=sb.toString();
+        }
+        // Collections.sort(number);
+        for(int j=0;j<number.size();j++,i++){
+            String key = number.get(j);
+            Stack<String> stack = map.get(key);
+            StringBuilder sb = new StringBuilder(stack.pop());
+            sb.append(" "+key);
+            results[i]=sb.toString();
+        }
+        return results;
+    }
+}
