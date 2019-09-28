@@ -1,0 +1,29 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        if(amount==0)
+            return 0;
+        Queue<Integer> queue = new LinkedList<Integer>();
+        Set<Integer> set = new HashSet<Integer>();
+        queue.add(amount);
+        set.add(amount);
+        int time=0;
+        
+        while(!queue.isEmpty()){
+            time++;
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int temp=queue.poll();
+                for(int j=0;j<coins.length;j++){
+                    int n=temp-coins[j];
+                    if(n==0)
+                        return time;
+                    else if(!set.contains(n) && n>0){
+                        queue.add(n);
+                        set.add(n);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}
