@@ -1,0 +1,62 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        char[] sc = s.toCharArray();
+        char[] tc = t.toCharArray();
+        
+        int[] tTime = new int[256];
+        int[] sTime = new int[256];
+        // for(int i=0;i<256;i++){
+        //     tTime[i]=0;
+        //     sTime[i]=0;
+        // }
+        int unique=0;
+        for(int i=0;i<t.length();++i){
+            ++tTime[tc[i]];
+            if(tTime[tc[i]]==1)
+                ++unique;
+        }
+        
+        int left=0;
+        int right=0;
+        int number=0;
+        int ansl=-1;
+        int ansr=-1;
+        for(left=0;left<sc.length;left++){
+            while(number<unique && right<sc.length){
+                ++sTime[sc[right]];
+                if(sTime[sc[right]]==tTime[sc[right]]){
+                    // System.out.println(sc[right]+" "+sTime[sc[right]] + " " + tTime[sc[right]]);
+                    ++number;
+                }
+                
+                ++right;
+            }
+            
+        
+        
+            if(number==unique){
+                if(ansl==-1 || right-left<ansr-ansl){
+                    ansr=right;
+                    ansl=left;
+                }
+                // System.out.println(ansl + " " + ansr);
+            }
+        
+        
+        
+            --sTime[sc[left]];
+            if(sTime[sc[left]]+1 == tTime[sc[left]]){
+                --number;
+            }
+        }
+        
+        if(ansr!=-1){
+            // System.out.println(ansl + " " + ansr);
+            return s.substring(ansl,ansr);
+        }else {
+            return "";
+        }
+    }
+    
+    
+}
