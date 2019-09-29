@@ -1,0 +1,52 @@
+class Solution {
+    public int[] gardenNoAdj(int N, int[][] paths) {
+        if(paths==null || paths.length==0 || N==0){
+            int[] res= new int[N];
+            for(int i=0;i<N;i++) res[i]=1;
+            return res;
+        }
+        
+        int[] res= new int[N];
+        Map<Integer,Set<Integer>> map = new HashMap<>();
+        
+        for(int i=0;i<paths.length;i++){
+            map.putIfAbsent(paths[i][0]-1,new HashSet<Integer>());
+            map.putIfAbsent(paths[i][1]-1,new HashSet<Integer>());
+            
+            map.get(paths[i][0]-1).add(paths[i][1]-1);
+            map.get(paths[i][1]-1).add(paths[i][0]-1);
+        }
+        
+        res[0]=1;
+        for(int i=1;i<N;i++){
+            boolean[] color=new boolean[4];
+            Set<Integer> set = map.get(i);
+            
+            if(set==null){
+                res[i]=1;
+                continue;
+            }
+            for(int a: set){
+                if(res[a]==1)
+                    color[0]=true;
+                else if(res[a]==2)
+                    color[1]=true;
+                else if(res[a]==3)
+                    color[2]=true;
+                else if(res[a]==4)
+                    color[3]=true;
+            }
+            
+            for(int j=0;j<4;j++){
+                // System.out.println(color[i]);
+                
+                if(!color[j]){
+                    res[i]=j+1;
+                    break;
+                }
+            }
+        }
+        return res;
+        
+    }
+}
