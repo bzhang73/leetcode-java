@@ -1,0 +1,59 @@
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        List<String> result = new ArrayList<>();
+        if(digits.length()==0)
+            return new ArrayList<>();
+        
+        findletter(digits,result);
+        return result;
+    }
+    private void findletter(String digits, List<String> result){
+        Queue<String> queue = new LinkedList<String>();
+        queue.add("");
+        for(int i=0;i<digits.length();i++){
+            int size = queue.size();
+            for(int j=0;j<size;j++){
+                String temp = queue.poll();
+                if(digits.charAt(i)=='2'){
+                    queue.add(temp+"a");
+                    queue.add(temp+"b");
+                    queue.add(temp+"c");
+                }else if(digits.charAt(i)=='3'){
+                    queue.add(temp+"d");
+                    queue.add(temp+"e");
+                    queue.add(temp+"f");
+                }else if(digits.charAt(i)=='4'){
+                    queue.add(temp+"g");
+                    queue.add(temp+"h");
+                    queue.add(temp+"i");
+                }else if(digits.charAt(i)=='5'){
+                    queue.add(temp+"j");
+                    queue.add(temp+"k");
+                    queue.add(temp+"l");
+                }else if(digits.charAt(i)=='6'){
+                    queue.add(temp+"m");
+                    queue.add(temp+"n");
+                    queue.add(temp+"o");
+                }else if(digits.charAt(i)=='7'){
+                    queue.add(temp+"p");
+                    queue.add(temp+"q");
+                    queue.add(temp+"r");
+                    queue.add(temp+"s");
+                }else if(digits.charAt(i)=='8'){
+                    queue.add(temp+"t");
+                    queue.add(temp+"u");
+                    queue.add(temp+"v");
+                }else if(digits.charAt(i)=='9'){
+                    queue.add(temp+"w");
+                    queue.add(temp+"x");
+                    queue.add(temp+"y");
+                    queue.add(temp+"z");
+                }
+            }
+        }
+        int size = queue.size();
+        for(int i=0;i<size;i++){
+            result.add(queue.poll());
+        }
+    }
+}
