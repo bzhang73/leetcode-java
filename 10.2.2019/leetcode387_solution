@@ -1,0 +1,35 @@
+class Solution {
+    public int firstUniqChar(String s) {
+        Set<Character> all = new HashSet<>();
+        Set<Character> set = new HashSet<>();
+        Map<Character,Integer> map = new HashMap<>();
+        Queue<Character> queue = new LinkedList<Character>();
+        
+        for(int i=0;i<s.length();i++){
+            if(!all.contains(s.charAt(i))){
+                all.add(s.charAt(i));
+                set.add(s.charAt(i));
+                map.put(s.charAt(i),i);
+                queue.offer(s.charAt(i));
+            }else{
+                // System.out.println(all.contains(s.charAt(i)) +" " + set.contains(s.charAt(i)));
+                if(set.contains(s.charAt(i)))
+                    set.remove(s.charAt(i));
+                // System.out.println(set.contains(s.charAt(i)));
+            }
+        }
+        // System.out.println(set.size());
+        if(set.size()>0){
+            while(!queue.isEmpty()){
+                char a=queue.poll();
+                if(set.contains(a))
+                    return map.get(a);
+            }
+            
+            // System.out.println(a + " " + set.contains(a));
+            
+        }
+            
+        return -1;
+    }
+}
