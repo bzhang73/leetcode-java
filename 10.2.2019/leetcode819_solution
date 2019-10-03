@@ -1,0 +1,37 @@
+class Solution {
+    public String mostCommonWord(String paragraph, String[] banned) {
+        
+        Map<String,Integer> map = new HashMap<>();
+        Set<String> ban = new HashSet<>();
+        Set<String> set = new HashSet<>();
+        for(int i=0;i<banned.length;i++)
+            ban.add(banned[i]);
+        String key=null;
+        int max=0;
+        paragraph = paragraph.replace('!',' ');
+        paragraph = paragraph.replace('?',' ');
+        paragraph = paragraph.replace('\'',' ');
+        paragraph = paragraph.replace(',',' ');
+        paragraph = paragraph.replace(';',' ');
+        paragraph = paragraph.replace('.',' ');
+        String[] split = paragraph.split(" ");
+        for(int i=0;i<split.length;i++){
+            split[i]=split[i].toLowerCase();
+            if(!ban.contains(split[i])){
+                if(split[i]==null || split[i]=="" || split[i].length()==0 )
+                    continue;
+                // System.out.print(split[i]);
+                set.add(split[i]);
+                map.putIfAbsent(split[i],0);
+                map.put(split[i],map.get(split[i])+1);
+                // System.out.println(map.get(split[i]));
+                if(map.get(split[i])>max){
+                    max=map.get(split[i]);
+                    key=split[i];
+                }
+            }
+        }
+        
+        return key;
+    }
+}
