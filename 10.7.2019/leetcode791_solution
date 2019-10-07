@@ -1,0 +1,47 @@
+class Solution {
+    public String customSortString(String S, String T) {
+        if(S.length()==0)
+            return S;
+        
+        Set<Character> set = new HashSet<>();
+        StringBuilder sb = new StringBuilder();
+        Queue<Character> queue = new LinkedList<>();
+        Queue<Character> rest = new LinkedList<>();
+        Map<Character,Integer> map = new HashMap<>();
+        
+        for(int i=0;i<S.length();i++){
+            if(!set.contains(S.charAt(i))){
+                set.add(S.charAt(i));
+                queue.add(S.charAt(i));
+            }
+        }
+        
+        for(int i=0;i<T.length();i++){
+            if(!set.contains(T.charAt(i)) && !map.containsKey(T.charAt(i))){
+                rest.add(T.charAt(i));
+            }
+            map.putIfAbsent(T.charAt(i),0);
+            map.put(T.charAt(i),map.get(T.charAt(i))+1);
+            
+        }
+        
+        while(!queue.isEmpty()){
+            char temp=queue.poll();
+            if(!map.containsKey(temp))
+                continue;
+            int time=map.get(temp);
+            for(int i=0;i<time;i++)
+                sb.append(""+temp);
+        }
+        
+        // System.out.println(sb.toString());
+        while(!rest.isEmpty()){
+            char temp=rest.poll();
+            int time=map.get(temp);
+            for(int i=0;i<time;i++)
+                sb.append(""+temp);
+        }
+        return sb.toString();
+    
+    }
+}
