@@ -1,0 +1,15 @@
+class Solution {
+    public int[] sortedSquares(int[] A) {
+        int[] res = new int[A.length];
+        if(A.length==0)
+            return res;
+        
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        for(int i=0;i<A.length;i++)
+            queue.add(A[i]*A[i]);
+        
+        for(int i=0;i<A.length;i++)
+            res[i]=queue.poll();
+        return res;
+    }
+}
