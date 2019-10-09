@@ -1,0 +1,60 @@
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        List<String> res=new ArrayList<>();
+        if(words.length==0 || k==0)
+            return res;
+        
+        HashMap<String,Integer> map=new HashMap<>();
+        for(int i=0;i<words.length;i++){
+            map.putIfAbsent(words[i],0);
+            map.put(words[i],map.get(words[i])+1);
+        }
+            
+        Map<String,Integer> temp=sortbyValue(map);
+        int i=0;
+        for(Map.Entry<String,Integer> en: temp.entrySet()){
+            // System.out.println("Key: "+en.getKey()+",Value: "+en.getValue());
+            res.add(en.getKey());
+            i++;
+            if(i>=k)
+                break;
+        }
+        return res;
+    }
+    
+    private HashMap sortbyValue(HashMap<String,Integer> map){
+        List<Map.Entry<String,Integer> > list = new LinkedList<Map.Entry<String,Integer>>(map.entrySet());
+        
+        Collections.sort(list,new Comparator<Map.Entry<String,Integer>>(){
+              public int compare(Map.Entry<String,Integer> o1, Map.Entry<String,Integer> o2){
+                  if(o1.getValue()==o2.getValue()){
+                      int i=0;
+                      String temp1=o1.getKey();
+                      String temp2=o2.getKey();
+                      while(i<temp1.length() && i<temp2.length()){
+                          if(temp1.charAt(i)==temp2.charAt(i)){
+                              i++;
+                          }else if(temp1.charAt(i)<temp2.charAt(i)){
+                              return -1;
+                          }else{
+                              return 1;
+                          }
+                          
+                      }
+                      if(i==temp1.length()){
+                          return -1;
+                      }else{
+                          return 1;
+                      }
+                  }
+                  return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+        
+        HashMap<String,Integer> temp = new LinkedHashMap<String,Integer>();
+        for(Map.Entry<String,Integer> aa:list){
+            temp.put(aa.getKey(),aa.getValue());
+        }
+        return temp;
+    }
+}
