@@ -1,0 +1,85 @@
+class Solution {
+    public int endlength=Integer.MAX_VALUE;
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        HashSet<String> diction = new HashSet<>();
+        for(String word: wordList)
+            diction.add(word);
+        List<List<String>> res=new ArrayList<>();
+        if(beginWord.equals(endWord)){
+            return res;
+        }
+        
+        HashSet<String> already = new HashSet<>();
+        List<String> list=new ArrayList<>();
+        already.add(beginWord);
+        list.add(beginWord);
+        
+        int length=1;
+        findres(beginWord,endWord,already,diction,list,res,length);
+        // System.out.println(endlength);
+        
+        Iterator<List<String>> iterator = res.iterator();
+        while(iterator.hasNext()){
+            List<String> next = iterator.next();
+            if(next.size()>=endlength)
+                iterator.remove();
+        }
+        
+        return res;
+    }
+    
+    private void findres(String word,String endWord, HashSet<String> already, HashSet<String> diction,List<String> list, List<List<String>> res,int length){
+        length++;
+        if(length>endlength)
+            return;
+        
+        if(word.equals(endWord)){
+            res.add(list);
+            endlength=length;
+            return ;
+        }
+        
+        for(char i='a';i<='z';i++){
+            for(int j=0;j<word.length();j++){
+                if(word.charAt(j)==i){
+                    continue;
+                }
+                
+                String newWord = replace(word,i,j);
+                if(diction.contains(newWord) && !already.contains(newWord)){
+                    List<String> templist=new ArrayList<String>(list);
+                    templist.add(newWord);
+                    
+                    HashSet<String> tempset=new HashSet<String>(already);
+                    tempset.add(newWord);
+                    findres(newWord,endWord, tempset, diction, templist,res,length);
+                }
+            }
+        }
+    }
+    
+//     private ArrayList<String> getNextWords(String word, Set<String> diction){
+//         ArrayList<String> res=new ArrayList<>();
+//         for(char i='a';i<='z';i++){
+//             for(int j=0;j<word.length();j++){
+//                 if(word.charAt(j)==i){
+//                     continue;
+//                 }
+                
+//                 String newWord = word.replace(word,i,j);
+//                 if(diction.contains(newWord)){
+//                     res.add(newWord);
+//                 }
+//             }
+//         }
+         
+//         return res;
+//     }
+    
+    private String replace(String word, char newchar, int index){
+        char sc[] = word.toCharArray();
+        
+        sc[index]=newchar;
+        return new String(sc);
+    }
+}
