@@ -1,0 +1,29 @@
+class Solution {
+    public int shortestDistance(String[] words, String word1, String word2) {
+        if(words.length==0)
+            return 0;
+        
+        Map<String,List<Integer> > map = new HashMap<>();
+        
+        for(int i=0;i<words.length;i++){
+            map.putIfAbsent(words[i],new ArrayList<Integer>());
+            map.get(words[i]).add(i);
+        }
+        
+        if(!map.containsKey(word1) || !map.containsKey(word2))
+            return 0;
+        
+        List<Integer> start=map.get(word1);
+        List<Integer> end=map.get(word2);
+        
+        int shortest=words.length;
+        for(int i=0;i<start.size();i++){
+            int sindex=start.get(i);
+            for(int j=0;j<end.size();j++){
+                int endindex=end.get(j);
+                shortest=Math.min(shortest,Math.abs(endindex-sindex));
+            }
+        }
+        return shortest;
+    }
+}
