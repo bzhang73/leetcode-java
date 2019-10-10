@@ -1,0 +1,100 @@
+class Solution {
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        if(beginWord==endWord)
+            return new ArrayList<>();
+        
+        List<List<String>> res = new ArrayList<>();
+        HashSet<String> diction = new HashSet<>();
+        for(String a: wordList)
+            diction.add(a);
+        
+        
+        HashMap<Integer,Set<String>> distance = new HashMap<>();
+        Set<String> list=new HashSet<String>();
+        list.add(beginWord);
+        distance.put(0,list);
+        
+        BFS(beginWord,endWord, distance, diction);
+        List<String> temp=new ArrayList<>();
+        temp.add(beginWord);
+        DFS(beginWord, endWord, 0, distance, diction, temp, res);
+        
+        return res;
+    }
+    
+    private void DFS(String startword,String endWord,int length,HashMap<Integer,Set<String>> distance, HashSet<String> diction,List<String> list, List<List<String>> res){
+        length++;
+        if(!distance.containsKey(length)){
+            return;
+        }
+        ArrayList<String> nextWords=findNext(startword,diction);
+        for(String nextWord: nextWords){
+            if(distance.get(length).contains(nextWord)){
+                list.add(nextWord);
+                if(nextWord.equals(endWord)){
+                    res.add(new ArrayList<String>(list));
+                    list.remove(list.size()-1);
+                    return;
+                }
+                DFS(nextWord,endWord,length,distance,diction,list,res);
+                list.remove(list.size()-1);
+            }        
+        }
+        
+    }
+    
+    private void BFS(String startword, String endWord, HashMap<Integer,Set<String>> distance, HashSet<String> diction){
+        Queue<String> queue=new LinkedList<>();
+        queue.add(startword);
+        HashSet<String> set=new HashSet<>();
+        set.add(startword);
+        
+        int length=1;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                String word=queue.poll();
+                List<String> nextWords=findNext(word,diction);
+                for(String nextWord: nextWords){
+                    if(set.contains(nextWord))
+                        continue;
+                    
+                    if(nextWord.equals(endWord)){
+                        
+                        distance.putIfAbsent(length,new HashSet<>());
+                        distance.get(length).add(endWord);
+                        return;
+                    }
+                    distance.putIfAbsent(length,new HashSet<>());
+                    distance.get(length).add(nextWord);
+                    queue.offer(nextWord);
+                    set.add(nextWord);
+                }
+            }
+            length++;
+        }
+    }
+    
+    private ArrayList<String> findNext(String word, HashSet<String> diction){
+        ArrayList<String> res =new ArrayList<>();
+        for(char i='a';i<='z';i++){
+            for(int j=0;j<word.length();j++){
+                if(i==word.charAt(j))
+                    continue;
+                
+                String newWord = replace(word,i,j);
+                if(diction.contains(newWord)){
+                    res.add(newWord);
+                }
+            }
+        }
+        return res;
+    }
+    
+    private String replace(String word, char newchar, int index){
+        char[] sc=word.toCharArray();
+        
+        sc[index]=newchar;
+        return new String(sc);
+    }
+}
