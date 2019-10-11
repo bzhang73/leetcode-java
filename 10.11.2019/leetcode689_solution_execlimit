@@ -1,0 +1,73 @@
+class Solution {
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        if(nums.length==0)
+            return false;
+        int sum=0;
+        List<Integer> list = new ArrayList<>();
+        Arrays.sort(nums);
+        for(int i:nums){
+            sum+=i;
+            list.add(i);
+        }
+        
+        if(sum%k!=0)
+            return false;
+        
+        int subsum=sum/k;
+        System.out.println(subsum);
+        return findRes(list,subsum);
+    }
+    
+    private boolean findRes(List<Integer> list, int target){
+        while(list.size()>0){
+            for(int j=list.size()-1;j>=0;j--){
+                List<Integer> res = new ArrayList<>();
+                boolean result =findSubset(list, target, 0, list.size()-1, res,j);
+            
+                if(result==false)
+                    return false;
+            
+             // System.out.println(res);
+                for(int i=0;i<res.size();i++){
+                    int temp=res.get(i);
+                    list.remove(temp);
+                }
+            }
+            
+            // System.out.println(list);
+        }
+        return true;
+    }
+    
+    private boolean findSubset(List<Integer> list, int target,int sum, int next, List<Integer> res,int end){
+        if(next>=end)
+            return false;
+        
+        int temp=list.get(next);
+        sum+=temp;
+        res.add(next);
+        // System.out.println("1" +res +"sum "+sum);
+        if(sum==target)
+            return true;
+        else if(sum>target){
+            res.remove(res.size()-1);
+            return false;
+        }
+        
+        boolean res1 = findSubset(list,target,sum,next+1,res,end);
+        if(res1==true){
+            // System.out.println(res);
+            return true;
+        }
+        
+        sum-=temp;
+        int a=res.size()-1;
+        res.remove(a);
+        // System.out.println("2"+res+"sum "+sum);
+        boolean res2=findSubset(list,target,sum,next+1,res,end);
+        if(res2==true)
+            return true;
+        
+        return false;
+    }
+}
