@@ -1,0 +1,32 @@
+class Solution {
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        int sum=0;
+        int len=nums.length;
+        for(int i=0;i<len;i++)
+            sum+=nums[i];
+        
+        if(sum%k>0)
+            return false;
+        int subsum=sum/k;
+        boolean[] flag=new boolean[len];
+        return search(nums,flag,subsum,k,subsum,0);
+    }
+    
+    private boolean search(int[] nums, boolean[] flag, int subsum, int k, int target,int index){
+        if(k==0)
+            return true;
+        if(target==0)
+            return search(nums,flag,subsum,k-1,subsum,0);
+        int len=nums.length;
+        for(int i=index;i<len;i++){
+            if(flag[i]==true)
+                continue;
+            flag[i]=true;
+            if(target-nums[i]>=0 && search(nums,flag,subsum,k,target-nums[i],index+1)){
+                return true;
+            }
+            flag[i]=false;
+        }
+        return false;
+    }
+}
