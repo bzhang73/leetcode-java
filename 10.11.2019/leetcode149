@@ -1,0 +1,50 @@
+class Solution {
+    public int maxPoints(int[][] points) {
+        if(points==null || points.length==0 || points[0].length==0)
+            return 0;
+        
+        if(points.length==1)
+            return 1;
+        
+        Map<Float, Set<Integer>> map = new HashMap<>();
+        Map<Float, Set<Integer>> map2 = new HashMap<>();
+        Set<Integer> same=new HashSet();
+        int max=0;
+        
+        for(int i=0;i<points.length-1;i++){
+            for(int j=i+1;j<points.length;j++){
+                if(points[i][0]==points[j][0]){
+                    if(!same.contains(i))
+                        same.add(i);
+                    if(!same.contains(j))
+                        same.add(j);
+                    max=Math.max(max,same.size());
+                }else{
+                    float slope = ((float)(points[i][1]-points[j][1]))/((float)(points[i][0]-points[j][0]));
+                    
+                    if(slope>=0){
+                        map.putIfAbsent(slope,new HashSet<Integer>());
+                        if(!map.get(slope).contains(i))
+                            map.get(slope).add(i);
+                        if(!map.get(slope).contains(j))
+                            map.get(slope).add(j);
+                        max=Math.max(max,map.get(slope).size());
+                    }else{
+                        slope=Math.abs(slope);
+                        map2.putIfAbsent(slope,new HashSet<Integer>());
+                        if(!map2.get(slope).contains(i))
+                            map2.get(slope).add(i);
+                        if(!map2.get(slope).contains(j))
+                            map2.get(slope).add(j);
+                        max=Math.max(max,map2.get(slope).size());
+                    }
+                    
+                    
+                    // System.out.println(slope + " " + i + " " + j + " " +max);
+                }
+                
+            }
+        }
+        return max;
+    }
+}
