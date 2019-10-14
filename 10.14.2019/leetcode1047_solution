@@ -1,0 +1,25 @@
+class Solution {
+    public String removeDuplicates(String S) {
+        if(S.length()==0)
+            return S;
+        int i=0;
+        while(i<S.length()){
+            int length=S.length();
+            for(i=0;i<S.length()-1;i++){
+                if(S.charAt(i)==S.charAt(i+1)){
+                    S=S.substring(0,i)+S.substring(i+2,S.length());
+                    break;
+                }
+            }
+            if(i+2<length){
+                
+            }else{
+                i++;
+            }
+        }
+        
+       
+        
+        return S;
+    }
+}
