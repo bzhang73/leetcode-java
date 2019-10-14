@@ -1,0 +1,59 @@
+class MyHashMap {
+    private int hashsize;
+    private int position;
+    private int[][] map;
+    /** Initialize your data structure here. */
+    private int gethash(int key){
+        return key/hashsize;
+    }
+    
+    private int getposition(int key){
+        return key%position;
+    }
+    
+    public MyHashMap() {
+        hashsize=1000;
+        position=1000;
+        map=new int[hashsize][];
+    }
+    
+    /** value will always be non-negative. */
+    public void put(int key, int value) {
+        int pos=getposition(key);
+        int hash=gethash(key);
+        if(map[hash]==null){
+            map[hash]=new int[position];
+            Arrays.fill(map[hash],-1);
+        }
+        map[hash][pos]=value;
+    }
+    
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    public int get(int key) {
+        int pos=getposition(key);
+        int hash=gethash(key);
+        if(map[hash]==null){
+            map[hash]=new int[position];
+            Arrays.fill(map[hash],-1);
+        }
+        return map[hash][pos];
+    }
+    
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    public void remove(int key) {
+        int pos=getposition(key);
+        int hash=gethash(key);
+        if(map[hash]==null){
+            return ;
+        }
+        map[hash][pos]=-1;
+    }
+}
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap obj = new MyHashMap();
+ * obj.put(key,value);
+ * int param_2 = obj.get(key);
+ * obj.remove(key);
+ */
