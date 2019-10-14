@@ -1,0 +1,22 @@
+class Solution {
+    public int minCost(int[][] costs) {
+       if(costs.length==0)
+           return 0;
+        
+        int[] dp=new int[3];
+        dp[0]=0;
+        dp[1]=0;
+        dp[2]=0;
+        for(int i=0;i<costs.length;i++){
+            int temp=costs[i][0]+Math.min(dp[1],dp[2]);
+            int temp1=costs[i][1]+Math.min(dp[0],dp[2]);
+            int temp2=costs[i][2]+Math.min(dp[0],dp[1]);
+            
+            dp[0]=temp;
+            dp[1]=temp1;
+            dp[2]=temp2;
+            
+        }
+        return Math.min(dp[0],Math.min(dp[1],dp[2]));
+    }
+}
