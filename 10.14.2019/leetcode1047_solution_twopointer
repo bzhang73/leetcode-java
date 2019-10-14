@@ -1,0 +1,19 @@
+class Solution {
+    public String removeDuplicates(String S) {
+        if(S.length()==0)
+            return S;
+        int i=0;
+        char[] sc=S.toCharArray();
+        for(int j=0;j<S.length();j++){
+            sc[i]=sc[j];
+            if(i>0 && sc[i-1]==sc[j]){
+                i--;
+            }else
+                i++;
+        }
+        
+       
+        
+        return new String(sc,0,i);
+    }
+}
