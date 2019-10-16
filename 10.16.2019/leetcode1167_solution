@@ -1,0 +1,48 @@
+class Solution {
+    private int left;
+    private int right;
+    private int index;
+    private int number;
+    private int length;
+    public int connectSticks(int[] sticks) {
+        if(sticks.length<2)
+            return 0;
+        
+        Arrays.sort(sticks);
+        int res=0,first,second;
+        left=0;
+        right=0;
+        index=0;
+        length=sticks.length;
+        while(true){
+            if(!gitmin(sticks))
+                break;
+            first=number;
+            // System.out.print(first+" ");
+            if(!gitmin(sticks))
+                break;
+            second=number;
+            // System.out.println(first+" "+second);
+            sticks[index]=first+second;
+            res+=sticks[index++];
+        }
+        return res;
+    }
+    
+    private boolean gitmin(int[] stick){
+        boolean l=left<length;
+        boolean r=right<index;
+        
+        if(l&&r){
+            number=(stick[left]<=stick[right])?stick[left++]:stick[right++];
+        }else if(l){
+            number = stick[left++];
+        }else if(r){
+            number = stick[right++];
+        }
+        
+        return r||l;
+    }
+    
+    
+}
