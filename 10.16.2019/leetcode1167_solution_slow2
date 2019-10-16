@@ -1,0 +1,20 @@
+class Solution {
+    public int connectSticks(int[] sticks) {
+        if(sticks.length<2)
+            return 0;
+        
+        PriorityQueue<Integer> queue = new PriorityQueue<>((a,b) -> a-b);
+        for(int a:sticks)
+            queue.offer(a);
+        
+        int res=0;
+        while(queue.size()>=2){
+            int sum=0;
+            sum+=queue.poll();
+            sum+=queue.poll();
+            res+=sum;
+            queue.offer(sum);
+        }
+        return res;
+    }
+}
