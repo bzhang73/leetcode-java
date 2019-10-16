@@ -1,0 +1,38 @@
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] res=new int[n][n];
+        int count=1;
+        
+        int row=0;
+        int time=n*n;
+        while(count<=time){
+            count=draw_out(res,n,row++,count);
+            // System.out.println(count+" "+row+" "+time);
+        }
+        return res;
+    }
+    
+    private int draw_out(int[][] res, int n, int row,int count){
+        int i=0;
+        int j=row;
+        for(i=j;i<n-row-1;i++){
+             res[j][i]=count++;
+        }
+        
+        for(;j<n-row-1;j++){
+            res[j][i]=count++;
+        }
+        
+        for(;i>row;i--){
+            res[j][i]=count++;
+        }
+        
+        for(;j>row;j--)
+            res[j][i]=count++;
+        
+        if(i==n-row-1)
+            res[i][i]=count++;
+        
+        return count;
+    }
+}
