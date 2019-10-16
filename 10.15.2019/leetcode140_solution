@@ -1,0 +1,38 @@
+class Solution {
+    private int largest;
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        List<String> res = new ArrayList<>();
+        if(s.length()==0 || wordDict.size()==0)
+            return res;
+        
+        largest=0;
+        Set<String> set = new HashSet<>();
+        for(String a: wordDict){
+            set.add(a);
+            largest=Math.max(largest,a.length());
+        }
+        
+        findString(0,s,set,new String(),res);
+        
+        return res;
+    }
+    
+    private void findString(int left, String s, Set<String> diction, String temp, List<String> res){
+        if(left>=s.length())
+            return;
+        
+        for(int i=left;i<s.length();i++){
+            if(i-left+1>=largest)
+                break;
+            String substring=s.substring(left,i+1);
+            if(diction.contains(substring)){
+                if(i+1==s.length()){
+                    res.add(temp+substring);
+                    return;
+                }else{
+                    findString(i+1,s,diction,temp+substring+" ",res);
+                }
+            }
+        }
+    }
+}
