@@ -1,0 +1,44 @@
+class Solution {
+    public int longestSubstring(String s, int k) {
+        if(s.length()<k)
+            return 0;
+        
+        
+        return longestSubstring(0,s.length()-1,s,k);
+    }
+    
+    private int longestSubstring(int start,int end, String s, int k){
+        if(end-start+1<k)
+            return 0;
+        
+        int[] map = new int[26];
+        for(int i=start;i<=end;i++){
+            map[s.charAt(i)-'a']++;
+        }
+        
+        Set<Character> set = new HashSet<>();
+        for(int i=start;i<=end;i++){
+            char temp=s.charAt(i);
+            if(0<map[temp-'a'] && map[temp-'a']<k){
+                set.add(temp);
+            }
+        }
+        
+        
+        if(set.isEmpty()){
+            return end-start+1;
+        }
+        
+        int max=0;
+        int left=start;
+        for(int right=start;right<=end;right++){
+            if(set.contains(s.charAt(right))){
+                max=Math.max(max,longestSubstring(left,right-1,s,k));
+                left=right+1;
+            }
+        }
+        
+        max=Math.max(max,longestSubstring(left,end,s,k));
+        return max;
+    }
+}
