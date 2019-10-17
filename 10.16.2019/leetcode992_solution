@@ -1,0 +1,91 @@
+class Solution {
+    private int count;
+    private int[][] board;
+    public int subarraysWithKDistinct(int[] A, int K) {
+        if(A.length<K)
+            return 0;
+        count=0;
+        board=new int[A.length][A.length];
+        Map<Integer, Integer> map = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
+        int left=0;
+        int i=0;
+        while(set.size()<K){
+            if(i==A.length)
+                return count;
+            if(!set.contains(A[i])){
+                set.add(A[i]);
+                map.put(A[i],1);
+            }else
+                map.put(A[i],map.get(A[i])+1);
+            i++;
+        }
+        board[left][i-1]=1;
+        count++;
+        for(;i<A.length;i++){
+            findsub(A,K,map,left,i-1);
+            if(!set.contains(A[i])){
+                set.add(A[i]);
+                map.put(A[i],1);
+                
+                while(set.size()>K){
+                    if(map.get(A[left])>1){
+                        map.put(A[left],map.get(A[left])-1);
+                    }else{
+                        set.remove(A[left]);
+                    }
+                    left++;
+                }
+                
+                count++;
+                board[left][i]=1;
+            }else{
+                map.put(A[i],map.get(A[i])+1);
+                count++;
+                board[left][i]=1;
+            }
+            
+        }
+        
+        findsub(A,K,map,left,i-1);
+        
+        for(i=0;i<A.length;i++){
+            for(int j=0;j<A.length;j++)
+                System.out.print(board[i][j]+" ");
+            System.out.println();
+        }
+            
+        return count;
+    }
+    
+    private void findsub(int[] num, int K, Map<Integer,Integer> map,int left,int right){
+        if(left>right)
+            return;
+        
+        // System.out.println(left+" "+right+ " "+ map.get(num[left]));
+        if(map.get(num[left])>1){
+            // System.out.println(left+ " "+ map.get(num[left]));
+            Map<Integer,Integer> temp = new HashMap<Integer,Integer>(map);
+            temp.put(num[left],temp.get(num[left])-1);
+            
+            if(board[left+1][right]==0){
+                count++;
+                board[left+1][right]=1;
+            }
+            
+            
+            findsub(num,K,temp,left+1,right);
+        }
+        
+        if(map.get(num[right])>1){
+            Map<Integer,Integer> temp = new HashMap<Integer,Integer>(map);
+            if(board[left][right-1]==0){
+                count++;
+                board[left+1][right]=1;
+                
+            }
+            temp.put(num[left],map.get(num[left])-1);
+            findsub(num,K,temp,left,right-1);
+        }
+    }
+}
