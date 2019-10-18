@@ -1,0 +1,69 @@
+class Solution {
+    public class Pointer{
+        int x;
+        int y;
+        public Pointer(int x,int y){
+            this.x=x;
+            this.y=y;
+        }
+    }
+    public int uniquePathsIII(int[][] grid) {
+        if(grid.length==0 || grid[0].length==0)
+            return 0;
+        int m=grid.length;
+        int n=grid[0].length;
+        
+        if(grid[0][0]==-1)
+            return 0;
+        
+        if(grid[0][0]==2)
+            return 1;
+        
+        Queue<Pointer> queue = new LinkedList<>();
+        Queue<Integer> queuex=new LinkedList<>();
+        Queue<Integer> queuey=new LinkedList<>();
+        int res=0;
+        
+        for(int i=0;i<m;i++)
+            for(int j=0;j<n;j++)
+                if(grid[i][j]==1){
+                    queuex.add(i);
+                    queuey.add(j);
+                    Pointer p=new Pointer(i,j);
+                    queue.add(p);
+                }
+            
+        
+        int[] adjx=new int[]{1,0,0,-1};
+        int[] adjy=new int[]{0,1,-1,0};
+        
+        while(!queuex.isEmpty()){
+            if(res>0)
+                break;
+            int size=queuex.size();
+            for(int i=0;i<size;i++){
+                int x=queuex.poll();
+                int y=queuey.poll();
+                
+                for(int j=0;j<4;j++){
+                    int tempx=x+adjx[j];
+                    int tempy=y+adjy[j];
+                    
+                    if(tempx<m && tempy<n && tempx>=0 && tempy>=0 ){
+                        if(grid[tempx][tempy]==2)
+                            res++;
+                        else if(grid[tempx][tempy]==-1){
+                            //
+                        }else{
+                            queuex.offer(tempx);
+                            queuey.offer(tempy);
+                        }
+                        
+                        
+                    } 
+                }
+            }
+        }
+        return res;
+    }
+}
