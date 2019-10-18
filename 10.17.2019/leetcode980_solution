@@ -1,0 +1,82 @@
+class Solution {
+    private int[][] board;
+    private int count;
+    private int m;
+    private int n;
+    public int uniquePathsIII(int[][] grid) {
+        count=0;
+        m=grid.length;
+        n=grid[0].length;
+        
+        int depth=0;
+        int startx=-1;
+        int starty=-1;
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==-1)
+                    continue;
+                
+                if(grid[i][j]==1){
+                    startx=i;
+                    starty=j;
+                }
+                
+                depth++;
+            }
+        }
+        // System.out.println(starty);
+        if(startx==-1||starty==-1)
+            return 0;
+        board=grid;
+        dfs(startx,starty,depth);
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++)
+                System.out.print(board[i][j]+" ");
+            System.out.println();
+        }
+        return count;
+    }
+    
+    public void dfs(int row, int col, int remain){
+        remain--;
+        // System.out.println(m+" n: "+n);
+        // System.out.println(remain+" "+board[row][col] +" "+remain);
+        if(remain<0)
+            return;
+        
+        
+        if(board[row][col]==2 && remain==0){
+            count++;
+            return;
+        }
+        
+        if(board[row][col]==-1)
+            return;
+        
+        board[row][col]=3;
+        // System.out.println(remain+" "+board[row][col] +" "+remain);
+        
+        if(row>0 && board[row-1][col]!=3){
+            int temp=board[row-1][col];
+            dfs(row-1,col,remain);
+            board[row-1][col]=temp;
+        }
+        if(col>0 && board[row][col-1]!=3){
+            int temp=board[row][col-1];
+            dfs(row,col-1,remain);
+            board[row][col-1]=temp;
+        }
+        if(row<m-1 && board[row+1][col]!=3){
+            int temp=board[row+1][col];
+            dfs(row+1,col,remain);
+            board[row+1][col]=temp;
+        }
+        if(col<n-1 && board[row][col+1]!=3){
+            int temp=board[row][col+1];
+            dfs(row,col+1,remain);
+            board[row][col+1]=temp;
+        }
+    }
+}
