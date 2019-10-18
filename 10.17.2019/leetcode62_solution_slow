@@ -1,0 +1,43 @@
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if(m==0 || n==0)
+            return 0;
+        if(m==1&&n==1)
+            return 1;
+        
+        Queue<Integer> queuex=new LinkedList<>();
+        Queue<Integer> queuey=new LinkedList<>();
+        int res=0;
+        
+        queuex.add(0);
+        queuey.add(0);
+        
+        int[] adjx=new int[]{1,0};
+        int[] adjy=new int[]{0,1};
+        
+        while(!queuex.isEmpty()){
+            
+            int size=queuex.size();
+            for(int i=0;i<size;i++){
+                int x=queuex.poll();
+                int y=queuey.poll();
+                
+                for(int j=0;j<2;j++){
+                    int tempx=x+adjx[j];
+                    int tempy=y+adjy[j];
+                    
+                    if(tempx<m && tempy<n){
+                        queuex.offer(tempx);
+                        queuey.offer(tempy);
+                        
+                        if(tempx==m-1 && tempy==n-1)
+                            res++;
+                    } 
+                }
+            }
+        }
+        return res;
+    }
+    
+    
+}
