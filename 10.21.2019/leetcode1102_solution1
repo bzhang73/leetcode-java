@@ -1,0 +1,44 @@
+class Solution {
+    public int maximumMinimumPath(int[][] A) {
+        int m=A.length;
+        int n=A[0].length;
+        
+        int[][] time=new int[m][n];
+        
+        int min=A[0][0];
+        time[0][0]=1;
+        
+        int startx=0;
+        int starty=0;
+        
+        int[] dircx=new int[]{-1,0,0,1};
+        int[] dircy=new int[]{0,-1,1,0};
+        
+        while(true){
+            int max=-1;
+            int tempx=startx;
+            int tempy=starty;
+            for(int i=0;i<4;i++){
+                // System.out.println((startx+dircx[i])+" "+ (starty+dircy[i]));
+                if(startx+dircx[i]>=0 && startx+dircx[i]<m && starty+dircy[i]>=0 && starty+dircy[i]<n){
+                    
+                    if(time[startx+dircx[i]][starty+dircy[i]]!=1){
+                        if(A[startx+dircx[i]][starty+dircy[i]]>max){
+                            max=A[startx+dircx[i]][starty+dircy[i]];
+                            tempx=startx+dircx[i];
+                            tempy=starty+dircy[i];
+                        }
+                    }
+                }
+            }
+            min=Math.min(max,min);
+            startx=tempx;
+            starty=tempy;
+            time[tempx][tempy]=1;
+            // System.out.println(A[startx][starty]);
+            if(startx==m-1 && starty==n-1)
+                break;
+        }
+        return min;
+    }
+}
