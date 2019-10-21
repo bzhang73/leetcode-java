@@ -1,0 +1,79 @@
+class Solution {
+    public int longestStrChain(String[] words) {
+        Map<Integer,List<Integer>> lenList=new HashMap<>();
+        int min=17;
+        int max=0;
+        for(int i=0;i<words.length;i++){
+            int len=words[i].length();
+            lenList.putIfAbsent(len,new ArrayList<>());
+            lenList.get(len).add(i);
+            min=Math.min(min,len);
+            max=Math.max(max,len);
+        }
+        
+        Map<Integer,List<Integer>> map=new HashMap<>();
+        buildGraph(words,map,lenList,min,max);
+        
+        Map<Integer,Integer> maxlength=new HashMap<>();
+        int res=0;
+        for(int i=0;i<words.length;i++){
+            res=Math.max(res,dfs(i,maxlength,map));
+        }
+        return res;
+    }
+    
+    private int dfs(int index, Map<Integer,Integer> length,Map<Integer,List<Integer>> map){
+        if(length.containsKey(index))
+            return length.get(index);
+        if(map.get(index)==null){
+            length.put(index,1);
+            return 1;
+        }
+        int res=1;
+        for(int a:map.get(index)){
+            res=Math.max(res, dfs(a,length,map)+1);
+            
+        }
+        length.put(index,res);
+        return res;
+    }
+    
+    private void buildGraph(String[] word, Map<Integer,List<Integer>> map, Map<Integer,List<Integer>> lenList, int min, int max){
+        for(int len=min;len<max;len++){
+            List<Integer> list=lenList.get(len);
+            List<Integer> nextOne = lenList.get(len+1);
+            if(list==null || nextOne==null || list.size()==0 || nextOne.size()==0)
+                continue;
+            
+            for(int m:list){
+                for(int n: nextOne){
+                    boolean res = isNext(word[m],word[n]);
+                    if(res){
+                        map.putIfAbsent(m,new ArrayList<>());
+                        map.get(m).add(n);
+                    }
+                }
+            }
+        }
+    }
+    
+    private boolean isNext(String w1, String w2){
+        if(w1==null || w2==null)
+            return false;
+        if(w1.length()+1!=w2.length())
+            return false;
+        for(int i=0;i<w1.length();i++){
+            if(w1.charAt(i)!=w2.charAt(i))
+                return isSame(w1,w2,i);
+        }
+        return true;
+    }
+    
+    private boolean isSame(String s1, String s2, int index){
+        while(index<s1.length()){
+            if(s1.charAt(index)!=s2.charAt(++index))
+                return false;
+        }
+        return true;
+    }
+}
