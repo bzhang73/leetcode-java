@@ -1,0 +1,45 @@
+class Solution {
+    public int[] prisonAfterNDays(int[] cells, int N) {
+        if(N==0)
+            return cells;
+        if(N==1)
+            return getNext(cells);
+        List<int[]> list = new ArrayList<>();
+        
+        int time=0;
+        int temp=N-1;
+        int[] original=getNext(cells);
+        int[] next=getNext(cells);
+        list.add(next);
+        while(temp>0){
+            time++;
+            next=getNext(next);
+            list.add(next);
+            if(Arrays.equals(original,next))
+                break;
+            temp--;
+        }
+        
+        if(temp==0)
+            return next;
+        
+        int index=(N-1)%time;
+        next=original;
+        
+        while(index>0){
+            next=getNext(next);
+            index--;
+        }
+        return next;
+    }
+    
+    private int[] getNext(int[] cells){
+        int[] temp=new int[cells.length];
+         for(int j=1;j<cells.length-1;j++){
+            if(cells[j-1]==cells[j+1]){
+                temp[j]=1;
+            }
+        }
+        return temp;
+    }
+}
