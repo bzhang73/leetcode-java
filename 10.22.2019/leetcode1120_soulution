@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private double max=0;
+    public double maximumAverageSubtree(TreeNode root) {
+        getDepth(root);
+        return max;
+    }
+    
+    private double[] getDepth(TreeNode root){
+        double[] res=new double[2];
+        if(root==null)
+            return res;
+        
+        double[] left=getDepth(root.left);
+        double[] right=getDepth(root.right);
+        
+        res[0]=left[0]+right[0]+root.val;
+        res[1]=left[1]+right[1]+1;
+        
+        max=Math.max(max,res[0]/res[1]);
+        return res;
+    }
+}
