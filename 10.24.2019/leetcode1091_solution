@@ -1,0 +1,48 @@
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int m=grid.length;
+        int n=grid[0].length;
+        if(grid[0][0]==1 || grid[m-1][n-1]==1)
+            return -1;
+        if(m==1 && n==1)
+            return 1;
+        
+        int[][] time=new int[m][n];
+        Queue<int[] > queue = new LinkedList<>();
+        int length=1;
+        queue.add(new int[]{0,0});
+        time[0][0]=1;
+        int[] adjx=new int[]{-1,-1,-1,0,0,1,1,1};
+        int[] adjy=new int[]{-1,0,1,-1,1,-1,0,1};
+        
+        while(!queue.isEmpty()){
+            length++;
+            int size=queue.size();
+            for(int j=0;j<size;j++){
+            int[] temp=queue.poll();
+            for(int i=0;i<8;i++){
+                int tempx=temp[0]+adjx[i];
+                int tempy=temp[1]+adjy[i];
+                
+                if(isValid(grid,tempx,tempy,time)){
+                    if(tempx==m-1 && tempy==n-1)
+                        return length;
+                    queue.offer(new int[]{tempx,tempy});
+                    time[tempx][tempy]=1;
+                }
+            }
+            }
+        }
+        return -1;
+    }
+    
+    private boolean isValid(int[][] grid, int row, int col,int[][] time)  {
+        if(row<0 || row>=grid.length || col<0 || col>=grid[0].length)
+            return false;
+        if(grid[row][col]==1)
+            return false;
+        if(time[row][col]==1)
+            return false;
+        return true;
+    }
+}
