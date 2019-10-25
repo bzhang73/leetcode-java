@@ -1,0 +1,28 @@
+class Solution {
+    public int numRollsToTarget(int d, int f, int target) {
+        Queue<Integer> queue=new LinkedList<>();
+        for(int i=1;i<f+1;i++)
+            queue.offer(i);
+        for(int i=1;i<d;i++){
+            int size=queue.size();
+            for(int k=0;k<size;k++){
+                int temp=queue.poll();
+                if(temp>=target)
+                    continue;
+                else if(temp<target-f*(d-i))
+                    continue;
+                for(int j=1;j<f+1;j++){
+                    queue.offer(temp+j);
+                    // System.out.println(temp+j);
+                }
+            }
+        }
+        
+        int res=0;
+        while(!queue.isEmpty())
+            if(queue.poll()==target)
+                res++;
+        
+        return res;
+    }
+}
