@@ -1,0 +1,32 @@
+class Solution {
+    public int[] relativeSortArray(int[] arr1, int[] arr2) {
+        List<Integer> list=new ArrayList<>();
+        Map<Integer,Integer> map= new HashMap<>();
+        Set<Integer> set=new HashSet<>();
+        for(int a:arr2)
+            set.add(a);
+        for(int a:arr1)
+            if(set.contains(a)){
+                map.putIfAbsent(a,0);
+                map.put(a,map.get(a)+1);
+            }else
+                list.add(a);
+        
+        int[] rest=new int[list.size()];
+        for(int i=0;i<list.size();i++)
+            rest[i]=list.get(i);
+        Arrays.sort(rest);
+        int[] res=new int[arr1.length];
+        int count=0;
+        for(int i=0;i<arr2.length;i++){
+            int a=arr2[i];
+            int time=map.get(a);
+            while(time-->0)
+                res[count++]=a;
+        }
+        
+        for(int i=0;i<rest.length;i++)
+            res[count++]=rest[i];
+        return res;
+    }
+}
