@@ -1,0 +1,35 @@
+class Solution {
+    private int length;
+    public int[][] generateMatrix(int n) {
+        length=n;
+        int[][] matrix=new int[n][n];
+        int time=0;
+        int count=1;
+        n*=n;
+        while(count<=n){
+            count=fillMatrix(matrix,time,count);
+            time++;
+        }
+        return matrix;
+    }
+    
+    private int fillMatrix(int[][] matrix,int time, int count){
+        if(time==length-time-1){
+            matrix[time][time]=count++;
+            return count;
+        }
+            
+        int i=time;
+        int j=time;
+        
+        while(j<length-time-1)
+            matrix[i][j++]=count++;
+        while(i<length-time-1)
+            matrix[i++][j]=count++;
+        while(j>time)
+            matrix[i][j--]=count++;
+        while(i>time)
+            matrix[i--][j]=count++;
+        return count;
+    }
+}
