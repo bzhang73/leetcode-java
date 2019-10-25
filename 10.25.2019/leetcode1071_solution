@@ -1,0 +1,32 @@
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+        Set<String> set =new HashSet<>();
+        for(int i=1;i<=str1.length();i++){
+            if(canDivide(str1,i)){
+                set.add(str1.substring(0,i));
+                // System.out.println(str1.substring(0,i));
+            }
+        }
+        
+        for(int i=str2.length();i>0;i--){
+            if(canDivide(str2,i)){
+                if(set.contains(str2.substring(0,i))){
+                    return str2.substring(0,i);
+                }
+            }
+        }
+        
+        return "";
+    }
+    
+    private boolean canDivide(String s, int index){
+        String temp=s.substring(0,index);
+        for(int i=index;i<s.length();i=i+index){
+            if(i+index>s.length())
+                return false;
+            if(!temp.equals(s.substring(i,i+index)))
+                return false;
+        }
+        return true;
+    }
+}
