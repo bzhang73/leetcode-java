@@ -1,10 +1,14 @@
 class Solution {
     public String fractionToDecimal(int numerator, int denominator) {
+        if(numerator==0)
+            return "0";
         long num=(long)numerator;
         long deno=(long)denominator;
         
         StringBuilder sb=new StringBuilder();
         sb.append(((num>0)^(deno>0))?"-":"");
+        num=Math.abs(num);
+        deno=Math.abs(deno);
         
         sb.append(num/deno);
         num%=deno;
