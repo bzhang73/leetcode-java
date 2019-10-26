@@ -1,0 +1,48 @@
+class Solution {
+    public int[] assignBikes(int[][] workers, int[][] bikes) {
+        int n=workers.length;
+        int m=bikes.length;
+        List<int[]>[] map=new ArrayList[2001];
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                int distance=Math.abs(workers[i][0]-bikes[j][0])+Math.abs(workers[i][1]-bikes[j][1]);
+                if(map[distance]==null){
+                    map[distance]=new ArrayList<>();
+                }
+                map[distance].add(new int[]{j,i});
+            }
+        }    
+        
+        int[] res=new int[n];
+        Arrays.fill(res,-1);
+        boolean[] valids=new boolean[m];
+        
+        int count=0;
+        
+        for(int i=0;i<2001;i++){
+            if(map[i]!=null){
+                // List<int[]> temp=map.get(i);
+                // int size=temp.size();
+                for(int[] temp: map[i]){
+                        // System.out.println(i+" "+temp[0]+" "+temp[1] +" "+valids[temp[0]]);
+                    if(!valids[temp[0]] && res[temp[1]]==-1){
+                        res[temp[1]]=temp[0];
+                        valids[temp[0]]=true;
+                        count++;
+                        // System.out.println(i+" "+temp[0]+" "+temp[1] +" "+valids[temp[0]]);
+                    }
+                    
+                    
+                    if(count==n)
+                        break;
+                }
+                
+                    
+                if(count==n)
+                    break;
+            }
+        }
+        return res;
+    }
+}
