@@ -1,0 +1,71 @@
+class LogSystem {
+    private List<String> system;
+    private int size;
+    private List<Integer> ids;
+    public LogSystem() {
+        size=0;
+        system=new ArrayList<>();
+        ids=new ArrayList<>();
+    }
+    
+    public void put(int id, String timestamp) {
+        // List<Integer> list=new ArrayList<Integer>;
+        // list.add(timestamp.substring(0,4));
+        // list.add(timestamp.substring(5,7));
+        // list.add(timestamp.substring(8,10));
+        // list.add(timestamp.substring(11,13));
+        // list.add(timestamp.substring(14,16));
+        // list.add(timestamp.substring(17,19));
+        system.add(timestamp);
+        ids.add(id);
+        size++;
+        // system.add(list);
+    }
+    
+    public List<Integer> retrieve(String s, String e, String gra) {
+        List<Integer> res=new ArrayList<>();
+        int end=-1;
+        
+        switch(gra){
+            case "Year":
+                end=4;
+                break;
+            case "Month":
+                end=7;
+                break;
+            case "Day":
+                end=10;
+                break;
+            case "Hour":
+                end=13;
+                break;
+            case "Minute":
+                end=16;
+                break;
+            case "Second":
+                end=19;
+        }
+        
+        for(int i=0;i<size;i++){
+            String temp=system.get(i);
+            for(int j=0;j<end;j++){
+                if(temp.substring(0,end).compareTo(s.substring(0,end))>=0  && temp.substring(0,end).compareTo(e.substring(0,end))<=0){
+                    if(j==end-1)
+                         res.add(ids.get(i));
+                   continue;
+                }else{
+                    break;
+                }
+            }
+        }
+        
+        return res;
+    }
+}
+
+/**
+ * Your LogSystem object will be instantiated and called as such:
+ * LogSystem obj = new LogSystem();
+ * obj.put(id,timestamp);
+ * List<Integer> param_2 = obj.retrieve(s,e,gra);
+ */
