@@ -1,0 +1,100 @@
+class Solution {
+    private int n,m;
+    public List<List<Integer>> pacificAtlantic(int[][] matrix) {
+        List<List<Integer>> res=new ArrayList<>();
+        if(matrix.length==0 || matrix[0].length==0)
+            return res;
+        m=matrix.length;
+        n=matrix[0].length;
+        
+        int[][] board=new int[m][n];
+        bulidOcean(matrix,board);
+        
+        // for(int i=0;i<m;i++){
+        //     for(int j=0;j<n;j++){
+        //         System.out.print(board[i][j]+" ");
+        //     }
+        //     System.out.println();
+        // }
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(board[i][j]==3){
+                    List<Integer> list=new ArrayList<>();
+                    list.add(i);
+                    list.add(j);
+                    res.add(list);
+                }
+                    
+            }
+        }
+        return res;
+    }
+    
+    public void bulidOcean(int[][] matrix,int[][] grid){
+        boolean[][] time=new boolean[m][n];
+        Queue<int[] > queue=new LinkedList<>();
+        int[] tempx=new int[]{-1,0,0,1};
+        int[] tempy=new int[]{0,-1,1,0};
+            
+        for(int i=1;i<m;i++){
+            queue.offer(new int[]{i,0});
+            time[i][0]=true;
+        }
+        for(int i=0;i<n;i++){
+            queue.offer(new int[]{0,i});
+            time[0][i]=true;
+        }
+        
+        while(!queue.isEmpty()){
+            int[] temp=queue.poll();
+            grid[temp[0]][temp[1]]+=1;
+            for(int j=0;j<4;j++){
+                int x=temp[0]+tempx[j];
+                int y=temp[1]+tempy[j];
+                
+                if(isValid(time,x,y)){
+                    if(matrix[temp[0]][temp[1]]<=matrix[x][y]){
+                        queue.offer(new int[]{x,y});
+                        time[x][y]=true;
+                    }
+                }
+            }
+        }
+        
+        
+        time = new boolean[m][n];
+        for(int i=0;i<m;i++){
+            queue.offer(new int[]{i,n-1});
+            time[i][n-1]=true;
+        }
+        for(int i=0;i<n-1;i++){
+            queue.offer(new int[]{m-1,i});
+            time[m-1][i]=true;
+        }
+        
+        while(!queue.isEmpty()){
+            int[] temp=queue.poll();
+            grid[temp[0]][temp[1]]+=2;
+            for(int j=0;j<4;j++){
+                int x=temp[0]+tempx[j];
+                int y=temp[1]+tempy[j];
+                
+                if(isValid(time,x,y)){
+                    if(matrix[temp[0]][temp[1]]<=matrix[x][y]){
+                        queue.offer(new int[]{x,y});
+                        time[x][y]=true;
+                    }
+                }
+            }
+        }
+    }
+    
+    private boolean isValid(boolean[][] time,int row, int col){
+        if(row<0 || row>=m || col<0 || col>=n)
+            return false;
+        if(time[row][col])
+            return false;
+        return true;
+    }
+}
