@@ -1,0 +1,36 @@
+class Solution {
+    public int[] prisonAfterNDays(int[] cells, int N) {
+        if(N==1)
+            return getNext(cells);
+        int[] originalNext=getNext(cells);
+        int[] next=getNext(cells);
+        int time=0;
+        while(time<N-1){
+            time++;
+            next=getNext(next);
+            if(Arrays.equals(next,originalNext)){
+                break;
+            }
+            
+        }
+        
+        int rest=(N-1-time)%time;
+        // System.out.println(rest);
+        while(rest-->0)
+            next=getNext(next);
+        
+        return next;
+    }
+    
+    public int[] getNext(int[] cells){
+        int[] res=new int[cells.length];
+        for(int i=1;i<cells.length-1;i++)
+            if(cells[i-1]==cells[i+1])
+                res[i]=1;
+                
+        // for(int i=0;i<8;i++)
+        //     System.out.print(res[i]+" ");
+        // System.out.println();
+        return res;
+    }
+}
