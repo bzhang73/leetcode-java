@@ -1,0 +1,21 @@
+class Solution {
+    public int combinationSum4(int[] nums, int target) {
+        int[] dp=new int[target+1];
+        Arrays.fill(dp,-1);
+        return backTrack(nums,target,dp,0);
+    }
+    
+    private int backTrack(int[] nums, int target, int[] dp, int sum){
+        if(target<sum)
+            return 0;
+        if(target==sum)
+            return 1;
+        if(dp[sum]!=-1)
+            return dp[sum];
+        int count=0;
+        for(int a:nums)
+            count+=backTrack(nums,target,dp,sum+a);
+        dp[sum]=count;
+        return dp[sum];
+    }
+}
