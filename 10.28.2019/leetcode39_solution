@@ -1,0 +1,41 @@
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res=new ArrayList<>();
+        if(candidates.length==0)
+            return res;
+        
+        int[] nums=removeDuplicates(candidates);
+        dfs(nums,0,new ArrayList<Integer>(),target,res);
+        return res;
+    }
+    
+    private void dfs(int[] candidates, int start, List<Integer> combination,int target, List<List<Integer>> res){
+        if(target==0){
+            res.add((new ArrayList<Integer>(combination)));
+            return ;
+        }
+        
+        for(int i=start;i<candidates.length;i++){
+            if(candidates[i]>target)
+                break;
+            combination.add(candidates[i]);
+            dfs(candidates,i,combination,target-candidates[i],res);
+            combination.remove(combination.size()-1);
+        }
+    }
+    
+    private int[] removeDuplicates(int[] candidates){
+        Arrays.sort(candidates);
+        int left=0;
+        for(int i=0;i<candidates.length;i++){
+            if(candidates[i]!=candidates[left]){
+                candidates[++left]=candidates[i];
+            }
+        }
+        left++;
+        int[] res=new int[left];
+        for(int i=0;i<left;i++)
+            res[i]=candidates[i];
+        return res;
+    }
+}
