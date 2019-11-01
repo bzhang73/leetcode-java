@@ -1,0 +1,82 @@
+class Solution {
+    private int max;
+    private int min;
+    public int longestStrChain(String[] words) {
+        Map<Integer,List<Integer>> lengthList = new HashMap<>();
+        max=0;
+        min=Integer.MAX_VALUE;
+        for(int i=0;i<words.length;i++){
+            int length=words[i].length();
+            lengthList.putIfAbsent(length, new ArrayList<Integer>());
+            lengthList.get(length).add(i);
+            max=Math.max(max,length);
+            min=Math.min(min,length);
+        }
+        
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        buildGraph(words, lengthList, map);
+        
+        Map<Integer,Integer> maxLength = new HashMap<>();
+        int res=0;
+        for(int i=0;i<words.length;i++){
+            res=Math.max(res,dfs(i,map,maxLength));
+        }
+        
+        return res;
+    }
+    
+    private int dfs(int index, Map<Integer, List<Integer>> map,  Map<Integer,Integer> maxLength){
+        if(maxLength.containsKey(index))
+            return maxLength.get(index);
+        if(map.get(index)==null){
+            maxLength.put(index,1);
+            return 1;
+        }
+        
+        int res=1;
+        for(int a: map.get(index)){
+            res=Math.max(res,dfs(a,map,maxLength)+1);
+        }
+        maxLength.put(index,res);
+        return res;
+    }
+    
+    private void buildGraph(String[] words, Map<Integer, List<Integer>> lengthList, Map<Integer, List<Integer>> map ){
+        for(int len=min;len<max;len++){
+            List<Integer> lenList=lengthList.get(len);
+            List<Integer> nextList=lengthList.get(len+1);
+            if(lenList==null || nextList==null || lenList.size()==0 || nextList.size()==0)
+                continue;
+            
+            for(int n: lenList){
+                for(int m: nextList){
+                    boolean res=isNext(words[n],words[m]);
+                    if(res){
+                        map.putIfAbsent(n,new ArrayList<Integer>());
+                        map.get(n).add(m);
+                    }
+                }
+            }
+        }
+    }
+    
+    private boolean isNext(String s1, String s2){
+        if(s1==null || s2==null)
+            return false;
+        if(s1.length()+1 !=s2.length())
+            return false;
+        for(int i=0;i<s1.length();i++){
+            if(s1.charAt(i)!=s2.charAt(i))
+                return isSame(s1,s2,i);
+        }
+        return true;
+    }
+    
+    private boolean isSame(String s1, String s2, int index){
+        for(;index<s1.length();index++){
+            if(s1.charAt(index)!=s2.charAt(index+1))
+                return false;
+        }
+        return true;
+    }
+}
