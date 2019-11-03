@@ -1,0 +1,40 @@
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] res=new int[n][n];
+        int time=0;
+        int count=1;
+        n*=n;
+        
+        while(count<=n){
+            count=fillBoard(res,time,count);
+            time++;
+            // System.out.println(count+" "+time);
+        }
+        return res;
+    }
+    
+    private int fillBoard(int[][] res, int time, int count){
+        if(time==res.length-1-time){
+            res[time][time]=count++;
+            return count;
+        }
+        
+        int length=res.length;
+        int i=time;
+        int j=time;
+        while(j<length-time-1)
+            res[i][j++]=count++;
+        while(i<length-time-1)
+            res[i++][j]=count++;
+        
+        // System.out.println(i+" "+j+" "+time);
+        while(j>time)
+            res[i][j--]=count++;
+        while(i>time)
+            res[i--][j]=count++;
+        // System.out.println(count);
+        return count;
+    }
+    
+   
+}
