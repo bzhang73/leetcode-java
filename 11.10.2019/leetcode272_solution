@@ -1,0 +1,74 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    class MyEntry implements Comparable<MyEntry>{
+        Integer value;
+        Double diff;
+        
+        public MyEntry(Integer value, Double diff){
+            this.value=value;
+            this.diff=diff;
+        }
+        
+        public int getValue(){
+            return this.value;
+        }
+        
+        public double getDiff(){
+            return this.diff;
+        }
+        
+        @Override
+        public int compareTo(MyEntry e){
+            if(this.diff<e.getDiff())
+                return -1;
+            if(this.diff>e.getDiff())
+                return 1;
+            return 0;
+        }
+        
+//         @Override
+//         public int hashCode(){
+//             return Objects.hash(value,diff);
+//         }
+        
+        // @Override
+        // public boolean equals(Object e){
+        //     return true;
+        // }
+        
+    }
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        Map<Integer, Double> map = new HashMap<>();
+        PriorityQueue<Solution.MyEntry> queue = new PriorityQueue<>();
+        
+        dfs(root, target, map);
+        
+        for(int a: map.keySet()){
+            queue.offer(new Solution.MyEntry(a,map.get(a)));
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        while(k-->0){
+            res.add(queue.poll().getValue());
+        }
+        return res;
+    }
+    
+    private void dfs(TreeNode root, double target, Map<Integer, Double> map){
+        if(root==null)
+            return ;
+        
+        map.put(root.val, Math.abs(target-root.val));
+        dfs(root.left,target,map);
+        dfs(root.right,target,map);
+        return;
+    }
+}
