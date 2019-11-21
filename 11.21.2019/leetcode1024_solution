@@ -1,0 +1,31 @@
+class Solution {
+    public int videoStitching(int[][] clips, int T) {
+        int[] intervals = new int[101];
+        for(int[] clip : clips) {
+            int start = clip[0];
+            intervals[start] = Math.max(intervals[start], clip[1]);
+            // System.out.println(intervals[start]+" "+start);
+        }
+        
+        int start = 0;
+        int end = 0;
+        int distance = 1;
+        
+        while(true) {
+            int next = 0;
+            for(int i = start; i <= end; ++i) {
+                next = Math.max(next, intervals[i]);
+            }
+            // System.out.println(next+" "+distance);
+            if (next >= T) {
+                return distance;
+            } else if (next > end) {
+                start = end;
+                end = next;
+                ++distance;
+            } else {
+                return -1;
+            }
+        }
+    }
+}
