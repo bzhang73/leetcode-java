@@ -1,0 +1,71 @@
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        for(int i=0;i<nums.length-3;i++){
+            if(i!=0 && nums[i]==nums[i-1]){
+                continue;
+            }
+            
+            for(int j=i+1; j<nums.length-2; j++){
+                if(j!=i+1 && nums[j] == nums[j-1]){
+                    continue;
+                }
+                
+                int left=j+1;
+                int right= nums.length-1;
+                while(left<right){
+                    int sum = nums[i]+nums[j]+nums[left]+nums[right];
+                    if(sum>target){
+                        right--;
+                    }else if(sum<target){
+                        left++;
+                    }else{
+                        List<Integer> list = new ArrayList<>();
+                        list.add(nums[i]);
+                        list.add(nums[j]);
+                        list.add(nums[left]);
+                        list.add(nums[right]);
+                        res.add(list);
+                        left++;
+                        right--;
+                        while(left<right && nums[left]==nums[left-1]){
+                            left++;
+                        }
+                        while(left<right && nums[right]==nums[right+1]){
+                            right--;
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    
+//     private void threeSum(int[] nums, int start, int target, int first, List<List<Integer>> res){
+//         for(int i=start; i<nums.length-2; i++){
+//             twoSum(nums, i+1, target-nums[i], first, nums[i], res);
+//         }
+//     }
+    
+//     private void twoSum(int[] nums, int start, int target, int first, int second, List<List<Integer>> res){==
+//         int left=start;
+//         int right=nums.length-1;
+//         while(left<right){
+//             int sum = nums[left]+nums[right];
+//             if(sum==target){
+                // List<Integer> list = new ArrayList<>();
+                // list.add(first);
+                // list.add(second);
+                // list.add(nums[left]);
+                // list.add(nums[right]);
+                // res.add(list);
+//             }else if(sum<target)
+//             {
+//                 left++;
+//             }else{
+//                 right--;
+//             }
+//         }
+//     }
+}
