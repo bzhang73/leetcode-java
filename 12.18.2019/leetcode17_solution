@@ -1,0 +1,35 @@
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        int diff = Integer.MAX_VALUE;
+        Arrays.sort(nums);
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i=2; i<nums.length; i++){
+            int distance = findClost(nums,i-1,target-nums[i]);
+            if(Math.abs(distance)<Math.abs(diff)){
+                diff=distance;
+            }
+        }
+        return (target-diff);
+    }
+    
+    private int findClost(int[] nums, int index, int target){
+        int difference = Integer.MAX_VALUE;
+        int left=0;
+        int right = index;
+        while(left<right){
+            int sum = nums[left]+nums[right];
+            if(sum==target){
+                return 0;
+            }
+            if(Math.abs(difference)>Math.abs(target-sum)){
+                difference = target-sum;
+            }
+            if(sum<target){
+                left++;
+            }else{
+                right--;
+            }
+        }
+        return difference;
+    }
+}
