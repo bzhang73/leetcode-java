@@ -1,0 +1,74 @@
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        if(intervals.length==0){
+            return new int[][]{newInterval};
+        }
+        
+        int min = findMin(intervals,newInterval);
+        int max = findMax(intervals,newInterval);
+        if(min==max){
+            intervals[min] = new int[]{Math.min(intervals[min][0], newInterval[0]), Math.max(intervals[min][1], newInterval[1])};
+            return intervals;
+        }
+        
+        int[][] newIntervals=new int[intervals.length - (max - min)][2];
+        
+        for(int i=0;i<min;i++){
+            newIntervals[i]=intervals[i];
+        }
+        
+        for(int i=intervals.length-1;i>max;i--){
+            newIntervals[i - (max - min)] = intervals[i];
+        }
+        
+        if(max<min){
+            newIntervals[min]=newInterval;
+        }else{
+            newIntervals[min]=new int[]{Math.min(intervals[min][0], newInterval[0]), Math.max(intervals[max][1], newInterval[1])};
+        }
+        
+        return newIntervals;
+    }
+    
+    private int findMin(int[][] intervals, int[] interval){
+        int index = -1;
+        int low = 0;
+        int high = intervals.length-1;
+        while(low<=high){
+            int mid = low + (high - low)/2;
+            int[] midInt = intervals[mid];
+            if(intersects(midInt, interval)){
+                index=mid;
+                high = mid-1;
+            }else if(interval[0]>midInt[1]){
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+        return (index==-1)?low:index;
+    }
+    
+    private int findMax(int[][] intervals, int[] interval){
+        int index = -1;
+        int low = 0;
+        int high = intervals.length-1;
+        while(low<=high){
+            int mid = low + (high - low)/2;
+            int[] midInt = intervals[mid];
+            if(intersects(midInt, interval)){
+                index=mid;
+                low = mid+1;
+            }else if(interval[0]>midInt[1]){
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+        return (index==-1)?high:index;
+    }
+    
+    private boolean intersects(int[] left, int[] right){
+        return (left[0]<=right[1]) && (left[1]>=right[0]);
+    }
+}
