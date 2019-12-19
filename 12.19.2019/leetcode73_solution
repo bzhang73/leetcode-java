@@ -1,0 +1,28 @@
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        Queue<Integer> queuex = new LinkedList<>();
+        Queue<Integer> queuey = new LinkedList<>();
+        int m=matrix.length;
+        int n=matrix[0].length;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]==0){
+                    queuex.offer(i);
+                    queuey.offer(j);
+                }
+            }
+        }
+        while(!queuex.isEmpty()){
+            int x=queuex.poll();
+            for(int i=0;i<n;i++){
+                matrix[x][i]=0;
+            }
+        }
+        while(!queuey.isEmpty()){
+            int y=queuey.poll();
+            for(int i=0;i<m;i++){
+                matrix[i][y]=0;
+            }
+        }
+    }
+}
