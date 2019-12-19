@@ -1,0 +1,22 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+        return helper(0,nums[0], nums);
+    }
+    
+    private boolean helper(int start, int end, int[] nums){
+        int max=start;
+        if(end>=nums.length-1)
+            return true;
+        for(int i=start;i<=end;i++){
+            max=Math.max(nums[i]+i,max);
+            // System.out.println(max);
+        }
+        if(max>=nums.length-1){
+            return true;
+        }else if(max==start){
+            return false;
+        }else{
+            return helper(end, max, nums);
+        }
+    }
+}
