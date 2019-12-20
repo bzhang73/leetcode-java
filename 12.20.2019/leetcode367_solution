@@ -1,0 +1,21 @@
+class Solution {
+    public boolean isPerfectSquare(int num) {
+        if(num==1)
+            return true;
+        long left=1;
+        long right=num-1;
+        while(left+1<right){
+            long mid = (right-left)/2+left;
+            long sum = mid*mid;
+            if(sum==num){
+                return true;
+            }else if(sum<num){
+                left=mid;
+            }else{
+                right=mid;
+            }
+        }
+        
+        return((left*left == num) || (right*right == num))? true:false;
+    }
+}
