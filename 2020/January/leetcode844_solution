@@ -1,0 +1,24 @@
+class Solution {
+    public boolean backspaceCompare(String S, String T) {
+        String s1 = covertString(S);
+        String t1 = covertString(T);
+        return s1.equals(t1);
+    }
+    
+    private String covertString(String S){
+        char[] sc = S.toCharArray();
+        
+        int left=0;
+        int right=0;
+        while(right<S.length()){
+            if(sc[right]=='#'){
+                if(left!=0)
+                    left--;
+            }else{
+                sc[left++]=sc[right];
+            }
+            right++;
+        }
+        return String.valueOf(sc).substring(0,left);
+    }
+}
