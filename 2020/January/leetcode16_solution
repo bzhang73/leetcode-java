@@ -1,0 +1,43 @@
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        if(nums==null || nums.length==0){
+            return -1;
+        }
+        
+        Arrays.sort(nums);
+        int differ=Integer.MAX_VALUE;
+        
+        for(int i=2;i<nums.length;i++){
+            int different = findTwo(nums, i-1, target-nums[i]);
+            if(Math.abs(differ)>Math.abs(different)){
+                differ=different;
+            }
+        }
+        return target-differ;
+    }
+    
+    private int findTwo(int[] nums, int index, int target){
+        int left=0;
+        int right=index;
+        int differ = Integer.MAX_VALUE;
+        
+        while(left<right){
+            int sum = nums[left] + nums[right];
+            
+            if(sum==target){
+                return 0;
+            }
+            
+            if(Math.abs(differ)>Math.abs(target-sum)){
+                differ=target-sum;
+            }
+            
+            if(sum<target){
+                left++;
+            }else{
+                right--;
+            }
+        }
+        return differ;
+    }
+}
