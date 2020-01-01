@@ -1,0 +1,60 @@
+class Solution {
+    private int m,n;
+    public int[][] candyCrush(int[][] board) {
+        m=board.length;
+        n=board[0].length;
+        
+        while(crushed(board)){
+            drop(board);
+            // for(int i=0;i<m;i++){
+            //     for(int j=0;j<n;j++){
+            //         System.out.print(board[i][j]+" ");
+            //     }
+            //     System.out.println();
+            // }
+            // return board;
+        }
+        return board;
+    }
+    
+    private boolean crushed(int[][] board){
+        boolean res=false;
+        for(int i=m-1;i>=0;i--){
+            for(int j=n-1;j>=0;j--){
+                    int temp=Math.abs(board[i][j]);
+                    if(temp==0){
+                        continue;
+                    }else{
+                        if(j>1 && temp == Math.abs(board[i][j-1]) && temp==Math.abs(board[i][j-2])){
+                            board[i][j]=-temp;
+                            board[i][j-1]=-temp;
+                            board[i][j-2]=-temp;
+                            res=true;
+                        }
+                        
+                        if(i>1 && temp == Math.abs(board[i-1][j]) && temp == Math.abs(board[i-2][j])){
+                            board[i][j]=-temp;
+                            board[i-1][j]=-temp;
+                            board[i-2][j]=-temp;
+                            res=true;
+                        }
+                    }
+            }
+        }
+        return res;
+    }
+    
+    private void drop(int[][] board){
+        for(int j=0;j<n;j++){
+            int depth=m-1;
+            for(int i=depth;i>=0;i--){
+                if(board[i][j]>=0){
+                    board[depth--][j] = board[i][j];
+                }
+            }
+            for(int i=depth;i>=0;i--){
+                board[i][j]=0;
+            }
+        }
+    }
+}
