@@ -1,0 +1,20 @@
+class Solution {
+    public int numSubarraysWithSum(int[] A, int S) {
+        if(A==null || A.length==0)
+            return 0;
+        int prefixSum=0;
+        int res=0;
+        int[] count = new int[A.length+1];
+        count[0]=1;
+        
+        for(int i: A){
+            prefixSum+=i;
+            if(prefixSum>=S){
+                res+=count[prefixSum-S];
+            }
+            
+            count[prefixSum]++;
+        }
+        return res;
+    }
+}
