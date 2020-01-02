@@ -1,0 +1,27 @@
+class Solution {
+    public int totalFruit(int[] tree) {
+        int res=0;
+        int left=0;
+        int length=tree.length;
+        int count=0;
+        int[] type=new int[length+1];
+        
+        for(int right=0;right<length;right++){
+            type[tree[right]]++;
+            if(type[tree[right]]==1){
+                if(count==2)
+                    res=Math.max(res,right-left);
+                count++;
+            }
+            
+            while(count>2){
+                type[tree[left]]--;
+                if(type[tree[left]]==0)
+                    count--;
+                left++;
+            }
+            res=Math.max(res,right-left+1);
+        }
+        return res;
+    }
+}
