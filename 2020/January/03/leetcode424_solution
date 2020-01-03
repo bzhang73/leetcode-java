@@ -1,0 +1,34 @@
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int res=0;
+        int[] map = new int[26];
+        for(char c='A';c<='Z';c++){
+            int left=0;
+            int count=0;
+            int right=0;
+            int current=0;
+            while(right<s.length()){
+                if(s.charAt(right)==c){
+                    current++;
+                }else{
+                    count++;
+                    current++;
+                }
+                if(count<=k){
+                    res=Math.max(res,current);
+                }
+                
+                while(count>k){
+                    if(s.charAt(left) !=c){
+                        count--;
+                    }
+                    left++;
+                    current--;
+                }
+                
+                right++;
+            }
+        }
+        return res;
+    }
+}
