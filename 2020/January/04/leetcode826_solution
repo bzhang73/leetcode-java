@@ -1,0 +1,39 @@
+class Solution {
+    public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+        int[] ability = new int[worker.length];
+        int res=0;
+        int max=0;
+        PriorityQueue<int[]> queue = new PriorityQueue<int[]>((a,b)-> a[0]-b[0]);
+        for(int i=0;i<profit.length;i++){
+            queue.offer(new int[]{difficulty[i],profit[i]});
+        }
+        
+        for(int i=0;i<profit.length;i++){
+            int[] temp = queue.poll();
+            difficulty[i]=temp[0];
+            profit[i]=temp[1];
+        }
+        
+        for(int i=0;i<profit.length;i++){
+            max=Math.max(max,profit[i]);
+            profit[i]=max;
+        }
+        Arrays.sort(worker);
+        int left=0;
+        for(int i =0;i<worker.length;i++){
+            while(left<worker.length && difficulty[left]<=worker[i]){
+                left++;
+            }
+            ability[i]=left-1;
+        }
+        
+        for(int i: ability){
+            if(i==-1){
+                continue;
+            }
+            // System.out.println(profit[i]);
+            res+=profit[i];
+        }
+        return res;
+    }
+}
