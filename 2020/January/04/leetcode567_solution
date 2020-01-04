@@ -1,0 +1,44 @@
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        if(s1==null || s1.length()==0)
+            return true;
+        if(s2==null)
+            return false;
+        char[] sc=s1.toCharArray();
+        char[] tc=s2.toCharArray();
+        int[] sTime=new int[256];
+        int[] tTime=new int[256];
+        int unique=0;
+        
+        int left=0;
+        int right=0;
+        int number=0;
+        for(char c: sc){
+            sTime[c]++;
+            if(sTime[c]==1)
+                unique++;
+        }
+        
+        while(right!=tc.length){
+            while(right<tc.length && number<unique){
+                tTime[tc[right]]++;
+                if(tTime[tc[right]]==sTime[tc[right]])
+                    number++;
+                right++;
+            }
+            
+            if(number==unique && right-left==sc.length)
+                return true;
+            
+            while(left<right && number>=unique){
+                tTime[tc[left]]--;
+                if(tTime[tc[left]]+1 == sTime[tc[left]])
+                    number--;
+                left++;
+                if(number==unique && right-left==sc.length)
+                    return true;
+            }
+        }
+        return false;
+    }
+}
