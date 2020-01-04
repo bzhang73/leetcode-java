@@ -1,0 +1,49 @@
+class Solution {
+    public String pushDominoes(String dominoes) {
+        if(dominoes==null)
+            return dominoes;
+        char[] sc=dominoes.toCharArray();
+        int length=sc.length;
+        int[] left=new int[length];
+        int[] right=new int[length];
+        int maxPoint=length+1;
+        for(int i=0;i<length;i++){
+            int leftPoint = maxPoint;
+            for(int j=i-1;j>=0;j--){
+                if(sc[j]=='L'){
+                    break;
+                }else if(sc[j]=='R'){
+                    leftPoint=i-j;
+                    break;
+                }
+            }
+            left[i]=leftPoint;
+            int rightPoint=maxPoint;
+            for(int j=i+1;j<length;j++){
+                if(sc[j]=='L'){
+                    rightPoint=j-i;
+                    break;
+                }else if(sc[j]=='R'){
+                    break;
+                }
+            }
+            right[i]=rightPoint;
+        }
+        
+        char[] res = new char[length];
+        for(int i=0;i<length;i++){
+            if(sc[i]!='.'){
+                res[i]=sc[i];
+                continue;
+            }
+            
+            if(left[i]==right[i]){
+                res[i]=sc[i];
+            }else if(left[i]<right[i]){
+                res[i]='R';
+            }else
+                res[i]='L';
+        }
+        return String.valueOf(res);
+    }
+}
