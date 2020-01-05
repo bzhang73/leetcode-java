@@ -1,0 +1,13 @@
+class Solution {
+    public int[] sortTransformedArray(int[] nums, int a, int b, int c) {
+        PriorityQueue<Integer> queue = new PriorityQueue<Integer>();
+        for(int i:nums){
+            queue.offer(a*i*i+b*i+c);
+        }
+        int[] res=new int[nums.length];
+        for(int i=0;i<res.length;i++){
+            res[i]=queue.poll();
+        }
+        return res;
+    }
+}
