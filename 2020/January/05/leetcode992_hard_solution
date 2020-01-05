@@ -1,0 +1,31 @@
+class Solution {
+    public int subarraysWithKDistinct(int[] A, int K) {
+        int left=0;
+        int right=0;
+        int res=0;
+        int unique=0;
+        int[] count=new int[A.length+1];
+        int number=0;
+        while(right<A.length){
+            count[A[right]]++;
+            if(count[A[right]]==1)
+                unique++;
+            if(unique>K){
+                count[A[left]]--;
+                unique--;
+                number=0;
+                left++;
+            }
+            while(count[A[left]]>1){
+                count[A[left]]--;
+                number++;
+                left++;
+            }
+            if(unique==K)
+                res+=number+1;
+            right++;
+        }
+        
+        return res;
+    }
+}
