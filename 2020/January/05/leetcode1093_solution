@@ -1,0 +1,52 @@
+class Solution {
+    public double[] sampleStats(int[] count) {
+        double[] res = new double[5];
+        double sum=0.0;
+        int left=0;
+        int right=count.length-1;
+        int countR=0;
+        int countL=0;
+        int mid1=0;
+        int mid2=0;
+        double mean=0;
+        double median;
+        int max=0;
+        while(count[left]==0)
+            left++;
+        while(count[right]==0)
+            right--;
+        res[0]=left;
+        res[1]=right;
+        
+        while(left<=right){
+            while(count[left]==0)
+                left++;
+            while(count[right]==0)
+                right--;
+            if(countL<countR){
+                mean+=count[left]*left;
+                countL+=count[left];
+                if(count[left]>count[max])
+                    max=left;
+                mid1=left++;
+            }else{
+                mean+=count[right]*right;
+                countR+=count[right];
+                if(count[right]>count[max])
+                    max=right;
+                mid2=right--;
+            }
+        }
+        mean/=(countL+countR);
+        if(countL<countR)
+            median=mid2;
+        else if(countL>countR)
+            median=mid1;
+        else
+            median=(double)(mid1+mid2)/2;
+        res[2]=mean;
+        res[3]=median;
+        res[4]=max;
+        return res;
+    }
+}
