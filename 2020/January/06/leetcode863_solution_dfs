@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    List<Integer> res;
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        res = new ArrayList<>();
+        find(target, K);
+        helper(root, target, K, 0);
+        return res;
+    }
+    
+    int helper(TreeNode root, TreeNode target, int K, int depth) {
+        if(root == null) return -1;
+        if(root == target) return depth;
+        
+        int left = helper(root.left, target, K, depth + 1);
+        if(left != -1) {
+            if(left - depth == K) res.add(root.val);
+            else  find(root.right, K - 1+ depth - left);
+            return left;
+        }
+
+        int right = helper(root.right, target, K, depth + 1);
+        if(right != -1) {
+            if(right - depth == K) res.add(root.val);
+            else find(root.left, K - 1+ depth - right);
+            return right;
+        }
+        return -1;
+    }
+    
+    void find(TreeNode root, int K) {
+        if(root == null) return;
+        if(K == 0) {
+            res.add(root.val);
+            return;
+        }
+        find(root.left, K-1);
+        find(root.right, K-1);
+    }
+    
+}
