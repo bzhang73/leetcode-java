@@ -1,0 +1,41 @@
+class Solution {
+    public int[][] updateMatrix(int[][] matrix) {
+        Queue<int[]> queue = new LinkedList<>();
+        int m=matrix.length;
+        int n=matrix[0].length;
+        for(int i=0;i<m;i++)
+            for(int j=0;j<n;j++)
+                if(matrix[i][j]==0)
+                    queue.offer(new int[]{i,j});
+        int[][] res = new int[m][n];
+        int length=0;
+        int[] dircx={-1,0,0,1};
+        int[] dircy={0,-1,1,0};
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp= queue.poll();
+                res[temp[0]][temp[1]]=length;
+                // System.out.println(temp[0]+" "+temp[1]+" "+length);
+                for(int j=0;j<4;j++){
+                    if(isValid(matrix,temp[0]+dircx[j],temp[1]+dircy[j])){
+                        queue.offer(new int[]{temp[0]+dircx[j],temp[1]+dircy[j]});
+                        matrix[temp[0]+dircx[j]][temp[1]+dircy[j]]=-1;
+                    }
+                }
+            }
+            length++;
+        }
+        return res;
+    }
+    
+    private boolean isValid(int[][] matrix, int x, int y){
+        if(x<0 || x>=matrix.length)
+            return false;
+        if(y<0 || y>=matrix[0].length)
+            return false;
+        if(matrix[x][y]!=1 )
+            return false;
+        return true;
+    }
+}
