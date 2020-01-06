@@ -1,0 +1,24 @@
+class Solution {
+    public int uniqueLetterString(String S) {
+        int n = S.length();
+        char[] sc = S.toCharArray();
+        int offset=0;
+        int res=0;
+        int left=1;
+        int right=1;
+        for(int i=0;i<n;i++){
+            offset=1;
+            left=1;
+            right=1;
+            while(i-offset>=0 && sc[i-offset]!=sc[i])
+                offset++;
+            left+=offset-1;
+            offset=1;
+            while(i+offset<n && sc[i+offset]!=sc[i])
+                offset++;
+            right+=offset-1;
+            res+=left*right;
+        }
+        return res;
+    }
+}
