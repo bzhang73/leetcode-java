@@ -1,0 +1,57 @@
+class Solution {
+    public int catMouseGame(int[][] graph) {
+        int n=graph.length;
+        int[][][] dp = new int[2*n][n][n];
+        fill(dp,-1);
+        return find(graph,dp,0,1,2);
+    }
+    
+    int find(int[][] graph, int[][][] dp, int step, int mouse, int cat){
+        if(step==graph.length*2)
+            return 0;
+        if(mouse==0)
+            return 1;
+        if(mouse==cat)
+            return 2;
+        if(step%2==0){
+            boolean flag=true;
+            for(int next: graph[mouse]){
+                int r = find(graph,dp,step+1,next,cat);
+                if(r==1){
+                    return dp[step][mouse][cat]=1;
+                }
+                if(r==0){
+                    flag=false;
+                }
+            }
+            if(flag)
+                return dp[step][mouse][cat]=2;
+            else
+                return dp[step][mouse][cat]=0;
+        }else{
+            boolean flag=false;
+            for(int next: graph[cat]){
+                if(next==0)
+                    continue;
+                int res= find(graph,dp,step+1,mouse,next);
+                if(res==2){
+                    return dp[step][mouse][cat]=2;
+                }
+                if(res==0){
+                    flag=true;
+                }
+            }
+            if(flag)
+                return dp[step][mouse][cat]=0;
+            else
+                return dp[step][mouse][cat]=1;
+        }
+    }
+    
+    private void fill(int[][][] dp, int val){
+        for(int i=0;i<dp.length;i++){
+            for(int j=0;j<dp[0].length;j++)
+                Arrays.fill(dp[i][j],val);
+        }
+    }
+}
