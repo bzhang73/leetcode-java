@@ -1,0 +1,53 @@
+class Solution {
+    public int catMouseGame(int[][] graph) {
+        int n = graph.length;
+        int[][][] dp =new int[2*n][n][n];
+        for(int i=0;i<dp.length;i++)
+            for(int j=0;j<dp[0].length;j++)
+                Arrays.fill(dp[i][j],-1);
+        return search(graph,dp,0,1,2);
+    }
+    
+    private int search(int[][] graph, int[][][] dp,int step, int mouse, int cat){
+        if(step==graph.length*2)
+            return 0;
+        if(mouse==cat)
+            return dp[step][mouse][cat]=2;
+        if(mouse==0)
+            return dp[step][mouse][cat]=1;
+        if(dp[step][mouse][cat]!=-1)
+            return dp[step][mouse][cat];
+        int temp = step%2;
+        boolean flag;
+        if(temp==0){
+            flag=true;
+            for(int i=0;i<graph[mouse].length;i++){
+                int next = search(graph,dp,step+1,graph[mouse][i],cat);
+                if(next==1)
+                    return dp[step][mouse][cat]=1;
+                else if(next!=2)
+                    flag=false;
+                                                
+            }
+            if(flag)
+                return dp[step][mouse][cat]=2;
+            else 
+                return dp[step][mouse][cat]=0;
+        }else{
+            flag=true;
+            for(int i=0;i<graph[cat].length;i++){
+                if(graph[cat][i]!=0){
+                    int next = search(graph,dp,step+1,mouse,graph[cat][i]);
+                    if(next==2)
+                        return dp[step][mouse][cat]=2;
+                    else if(next!=1)
+                        flag=false;
+                }                                
+            }
+            if(flag)
+                return dp[step][mouse][cat]=1;
+            else 
+                return dp[step][mouse][cat]=0;
+        }
+    }
+}
