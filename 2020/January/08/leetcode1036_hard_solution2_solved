@@ -1,0 +1,64 @@
+class Solution {
+    private int[][] direction = new int[][]{{-1,0},{0,-1},{0,1},{1,0}};
+    private Set<Long> block;
+    private Set<Long> visited;
+    public boolean isEscapePossible(int[][] blocked, int[] source, int[] target) {
+        block=new HashSet<>();
+        for(int[] temp : blocked)
+           block.add(changeLong(temp));
+        
+        if(block.contains(changeLong(source)))
+            return false;    
+        if(block.contains(changeLong(target)))
+            return false;
+        if(source[0]==target[0] && source[1]==target[1])
+            return true;
+        return bfs(source, target)&& bfs(target,source);
+    }
+    
+    private boolean bfs(int[] start, int[] end){
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(start);
+        
+        visited=new HashSet<>();
+        visited.add(changeLong(start));
+        int length=block.size();
+        int area=length*length/2;
+        
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp = queue.poll();
+                for(int j=0;j<4;j++){
+                    int x= temp[0]+direction[j][0];
+                    int y= temp[1]+direction[j][1];
+                    Long next=changeLong(new int[]{x,y});
+                    
+                    if(isValid(x,y,next)){
+                        if((x==end[0] && y==end[1]) || visited.size()>area)
+                            return true;
+                        queue.add(new int[]{x,y});
+                        visited.add(next);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean isValid(int x, int y, Long next){
+        if(x<0 || x>=1000000)
+            return false;
+        if(y<0 || y>=1000000)
+            return false;
+        if(block.contains(next))
+            return false;
+        if(visited.contains(next))
+            return false;
+        return true;
+    }
+    
+    private long changeLong(int[] x){
+        return 1000000*x[0]+x[1];
+    }
+}
