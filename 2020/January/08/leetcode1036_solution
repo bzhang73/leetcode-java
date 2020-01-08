@@ -1,0 +1,60 @@
+class Solution {
+    private int[][] direction = new int[][]{{-1,0},{0,-1},{0,1},{1,0}};
+    private Map<Integer,Set<Integer>> board;
+    private Map<Integer,Set<Integer>> block;
+    public boolean isEscapePossible(int[][] blocked, int[] source, int[] target) {
+        board=new HashMap<>();
+        block=new HashMap<>();
+        for(int[] temp : blocked){
+            block.putIfAbsent(temp[0],new HashSet<>());
+            block.get(temp[0]).add(temp[1]);
+        }
+            
+        if(block.containsKey(source[0]) && block.get(source[0]).contains(source[1]))
+            return false;    
+        if(block.containsKey(target[0]) && block.get(target[0]).contains(target[1]))
+            return false;
+        if(source[0]==target[0] && source[1]==target[1])
+            return true;
+        return bfs(blocked, source, target);
+    }
+    
+    private boolean bfs(int[][] blocked, int[] start, int[] end){
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{start[0],start[1]});
+        board.putIfAbsent(start[0],new HashSet<>());
+        board.get(start[0]).add(start[1]);
+        int length=blocked.length;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp = queue.poll();
+                for(int j=0;j<4;j++){
+                    int x= temp[0]+direction[j][0];
+                    int y= temp[1]+direction[j][1];
+                    
+                    if(isValid(x,y)){
+                        if(x==end[0] && y==end[1])
+                            return true;
+                        queue.add(new int[]{x,y});
+                        board.putIfAbsent(x,new HashSet<>());
+                        board.get(x).add(y);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean isValid(int x, int y){
+        if(x<0 || x>=1000000)
+            return false;
+        if(y<0 || y>=1000000)
+            return false;
+        if(block.containsKey(x) && block.get(x).contains(y))
+            return false;
+        if(board.containsKey(x) && board.get(x).contains(y))
+            return false;
+        return true;
+    }
+}
