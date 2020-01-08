@@ -1,0 +1,35 @@
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        Map<Integer, Set<Integer>> graph = new HashMap<>();
+        for(int[] edge: edges){
+            graph.putIfAbsent(edge[0],new HashSet<>());
+            graph.putIfAbsent(edge[1],new HashSet<>());
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
+        }
+        
+        boolean[] visited = new boolean[n];
+        if(!dfs(graph,0,visited))
+            return false;
+        
+        for(int i=0;i<visited.length;i++)
+            if(!visited[i])
+                return false;
+        return true;
+    }
+    
+    boolean dfs(Map<Integer,Set<Integer>> graph, int curr, boolean[] visited){
+        if(visited[curr])
+            return false;
+        
+        visited[curr]=true;
+        if(graph.containsKey(curr)){
+            for(int neighbor: graph.get(curr)){
+                graph.get(neighbor).remove(curr);
+                if(!dfs(graph,neighbor,visited))
+                    return false;
+            }
+        }
+        return true;
+    }
+}
