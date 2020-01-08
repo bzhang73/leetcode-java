@@ -1,0 +1,37 @@
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        if(edges.length==0)
+            return n==1?true:false;
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        for(int i=0;i<n;i++)
+            map.put(i,new ArrayList<Integer>());
+        Set<Integer> count = new HashSet<>();
+        for(int[] temp: edges){
+            count.add(temp[0]);
+            count.add(temp[1]);
+            map.get(temp[0]).add(temp[1]);
+            map.get(temp[1]).add(temp[0]);
+        }
+        if(count.size()!=n)
+            return false;
+        Queue<Integer> queue = new LinkedList<>();
+        Set<Integer> set = new HashSet<>();
+        queue.add(edges[0][0]);
+        int res=0;
+        while(!queue.isEmpty()){
+            int temp=queue.poll();
+            set.add(temp);
+            int size=map.get(temp).size();
+            for(int i=0;i<size;i++){
+                int a = (int) map.get(temp).get(i);
+                res++;
+                if(!set.contains(a)){
+                    set.add(a);
+                    queue.add(a);
+                }
+            }
+        }
+        // System.out.println(res);
+        return res==2*(count.size()-1)?true:false;
+    }
+}
