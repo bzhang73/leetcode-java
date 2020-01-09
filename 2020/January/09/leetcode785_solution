@@ -1,0 +1,33 @@
+class Solution {
+    public boolean isBipartite(int[][] graph) {
+        int[] isValid = new int[graph.length];
+        Arrays.fill(isValid,-1);
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i=0;i<graph.length;i++)
+            if(graph[i].length!=0){
+                isValid[i]=1;
+                queue.add(i);
+                break;
+            }
+                
+        int count=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            count%=2;
+            for(int i=0;i<size;i++){
+                int temp = queue.poll();
+                for(int a: graph[temp]){
+                    if(isValid[a]==-1){
+                        queue.add(a);
+                        isValid[a]=count;
+                    }else{
+                        if(isValid[a]!=count)
+                            return false;
+                    }
+                }
+            }
+            count++;
+        }
+        return true;
+    }
+}
