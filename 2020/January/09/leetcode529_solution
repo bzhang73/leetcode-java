@@ -1,0 +1,54 @@
+class Solution {
+    private int[] directionX=new int[]{-1,-1,-1,0,0,1,1,1};
+    private int[] directionY=new int[]{-1,0,1,-1,1,-1,0,1};
+    public char[][] updateBoard(char[][] board, int[] click) {
+        char c = board[click[0]][click[1]];
+        if(c=='M')
+            board[click[0]][click[1]]='X';
+        search(board,click[0],click[1]);
+        return board;
+    }
+    
+    private void search(char[][] board, int x, int y){
+        if(!isValid(board,x,y) || board[x][y]!='E')
+            return;
+        
+        int num = count(board,x,y);
+        if(num>0){
+            board[x][y]=(char)('0'+num);
+            return;
+        }
+        board[x][y]='B';
+        for(int i=0;i<directionX.length;i++){
+            int tempx=directionX[i]+x;
+            int j=directionY[i]+y;
+            if(!isValid(board,tempx,j)){
+                continue;
+            }
+            if(board[tempx][j]=='E')
+                search(board,tempx,j);
+        }
+    }
+    
+    private int count(char[][] board, int x, int y){
+        int res=0;
+        for(int i=0;i<directionX.length;i++){
+            int tempx=directionX[i]+x;
+            int j=directionY[i]+y;
+            if(!isValid(board,tempx,j)){
+                continue;
+            }
+            if(board[tempx][j]=='M')
+                res++;
+        }
+        return res;
+    }
+    
+    private boolean isValid(char[][] board, int x, int y){
+        if(x<0 || x>=board.length)
+            return false;
+        if(y<0 || y>=board[0].length)
+            return false;
+        return true;
+    }
+}
