@@ -1,0 +1,43 @@
+class Solution {
+    public int networkDelayTime(int[][] times, int N, int K) {
+        if(times==null || times.length==0 || times[0]==null || times[0].length==0)
+            return -1;
+        int res=0;
+        List[] list = new ArrayList[N+1];
+        for(int i=0;i<N+1;i++)
+            list[i]=new ArrayList<>();
+        for(int i=0;i<times.length;i++)
+            list[times[i][0]].add(i);
+        
+        PriorityQueue<int[] > queue = new PriorityQueue<int[]>((a,b)->(a[1]-b[1]));
+        queue.add(new int[]{K,0});
+        boolean[] visited= new boolean[N+1];
+        int count=0;
+            
+        int[] distance = new int[N+1];
+        for(int i=0;i<N+1;i++)
+            distance[i]=Integer.MAX_VALUE;
+        distance[K]=0;
+        
+        while(!queue.isEmpty()){
+            int[] temp =queue.poll();
+            // System.out.println(temp[0]+" "+temp[1]);
+            if(visited[temp[0]])
+                continue;
+            
+            count++;
+            visited[temp[0]]=true;
+            res=Math.max(res,temp[1]);
+            for(int i=0; i<list[temp[0]].size();i++){
+                int next=(int)list[temp[0]].get(i);
+                int length=times[next][2]+temp[1];
+                if(distance[times[next][1]]>length){
+                    // System.out.println(times[next][1]+" "+length);
+                    distance[times[next][1]]=length;
+                    queue.offer(new int[]{times[next][1], length});
+                }
+            }
+        }
+        return count==N?res:-1;
+    }
+}
