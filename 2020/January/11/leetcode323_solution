@@ -1,0 +1,35 @@
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        if(edges==null || edges.length==0 || edges[0]==null || edges[0].length==0)
+            return n;
+        List[] list = new ArrayList[n];
+        for(int i=0;i<n;i++)
+            list[i]=new ArrayList<>();
+        for(int i=0;i<edges.length;i++){
+            list[edges[i][0]].add(edges[i][1]);
+            list[edges[i][1]].add(edges[i][0]);
+        }
+        
+        boolean[] visited = new boolean[n];
+        int res=0;
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i=0;i<n;i++){
+            if(visited[i])
+                continue;
+            queue.add(i);
+            visited[i]=true;
+            while(!queue.isEmpty()){
+                int temp = queue.poll();
+                for(int j=0;j<list[temp].size();j++){
+                    int a = (int)list[temp].get(j);
+                    if(!visited[a]){
+                        queue.offer(a);
+                        visited[a]=true;
+                    }
+                }
+            }
+            res++;
+        }
+        return res;
+    }
+}
