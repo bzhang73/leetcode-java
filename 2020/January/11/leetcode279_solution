@@ -1,0 +1,27 @@
+class Solution {
+    public int numSquares(int n) {
+        Queue<Integer> queue = new LinkedList<>();
+        int res=1;
+        queue.offer(n);
+        boolean[] visited =new boolean[n+1];
+        visited[n]=true;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int temp = queue.poll();
+                int a=(int)Math.sqrt(temp)/1;
+                for(int j=1;j<=a;j++){
+                    int c=temp-j*j;
+                    if(!visited[c]){
+                        if(c==0)
+                            return res;
+                        queue.offer(c);
+                        visited[c]=true;
+                    }
+                }
+            }
+            res++;
+        }
+        return 0;
+    }
+}
