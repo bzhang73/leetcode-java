@@ -1,0 +1,105 @@
+class Solution {
+    public List<List<Integer>> pacificAtlantic(int[][] matrix) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(matrix==null || matrix.length==0 || matrix[0]==null || matrix[0].length==0)
+            return res;
+        
+        int m=matrix.length;
+        int n=matrix[0].length;
+        int[][] board = new int[m][n];
+        
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[][] visited=new boolean[m][n];
+        
+        int[][] direction = new int[][]{{-1,0},{0,-1},{0,1},{1,0}};
+        
+        for(int i=0;i<m;i++){
+            board[i][0]++;
+            queue.offer(new int[]{i,0});
+            visited[i][0]=true;
+        }
+        for(int i=1;i<n;i++){
+            board[0][i]++;
+            queue.offer(new int[]{0,i});
+            visited[0][i]=true;
+        }
+        
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp =queue.poll();
+                for(int j=0;j<4;j++){
+                    int tempx=temp[0]+direction[j][0];
+                    int tempy=temp[1]+direction[j][1];
+                    
+                    if(tempx>=0 && tempx<m && tempy>=0 && tempy<n && !visited[tempx][tempy]){
+                        if(matrix[tempx][tempy] >= matrix[temp[0]][temp[1]]){
+                            queue.offer(new int[]{tempx,tempy});
+                            board[tempx][tempy]++;
+                            visited[tempx][tempy]=true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        //  for(int i=0;i<m;i++){
+        //     for(int j=0;j<n;j++){
+        //         System.out.print(board[i][j]+" ");
+        //         // if(board[i][j]==2){
+        //         //     List<Integer> list = new ArrayList<>();
+        //         //     list.add(i);
+        //         //     list.add(j);
+        //         //     res.add(list);
+        //         // }
+        //     }
+        //     System.out.println();
+        // }
+        
+        visited=new boolean[m][n];
+        for(int i=0;i<m;i++){
+            board[i][n-1]++;
+            queue.offer(new int[]{i,n-1});
+            visited[i][n-1]=true;
+        }
+        
+        for(int i=0;i<n-1;i++){
+            board[m-1][i]++;
+            queue.offer(new int[]{m-1,i});
+            visited[m-1][i]=true;
+        }
+        
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp =queue.poll();
+                for(int j=0;j<4;j++){
+                    int tempx=temp[0]+direction[j][0];
+                    int tempy=temp[1]+direction[j][1];
+                    
+                    if(tempx>=0 && tempx<m && tempy>=0 && tempy<n && !visited[tempx][tempy]){
+                        if(matrix[tempx][tempy] >= matrix[temp[0]][temp[1]]){
+                            queue.offer(new int[]{tempx,tempy});
+                            board[tempx][tempy]++;
+                            visited[tempx][tempy]=true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                // System.out.print(board[i][j]+" ");
+                if(board[i][j]==2){
+                    List<Integer> list = new ArrayList<>();
+                    list.add(i);
+                    list.add(j);
+                    res.add(list);
+                }
+            }
+            // System.out.println();
+        }
+        return res;
+    }
+}
