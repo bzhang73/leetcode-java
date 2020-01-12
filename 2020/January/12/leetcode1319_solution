@@ -1,0 +1,49 @@
+class Solution {
+    public int makeConnected(int n, int[][] connections) {
+        if(n==1)
+            return 0;
+        if(connections.length<n-1){
+            return -1;
+        }
+        boolean[] visited=new boolean[n];
+        
+        int[] degree=new int[n];
+        List[] list = new ArrayList[n];
+        for(int i=0;i<n;i++)
+            list[i]=new ArrayList<>();
+        
+        for(int i=0;i<connections.length;i++){
+            list[connections[i][0]].add(connections[i][1]);
+            list[connections[i][1]].add(connections[i][0]);
+            degree[connections[i][0]]++;
+            degree[connections[i][1]]++;
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        int res=0;
+        for(int i=0;i<n;i++){
+            if(degree[i]==0)
+                res++;
+            else if(degree[i]>0){
+                if(!visited[i]){
+                    queue.offer(i);
+                    while(!queue.isEmpty()){
+                        int size=queue.size();
+                        for(int j=0;j<size;j++){
+                            int temp =queue.poll();
+                            for(int k=0;k<list[temp].size();k++){
+                                int a=(int)list[temp].get(k);
+                                if(!visited[a]){
+                                    queue.offer(a);
+                                    visited[a]=true;
+                                }
+                            }
+                        }
+                    }
+                    res++;
+                }
+            }
+        }
+        return res-1;
+    }
+}
