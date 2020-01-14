@@ -1,0 +1,28 @@
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+        Map<Integer, Map<Integer,Integer>> map = new HashMap<>();
+        for(int[] temp: flights){
+            if(!map.containsKey(temp[0]))
+                map.put(temp[0],new HashMap<>());
+            map.get(temp[0]).put(temp[1],temp[2]);
+        }
+        
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a,b)->(Integer.compare(a[0], b[0])));
+        queue.add(new int[]{0,src,K+1});
+        while(!queue.isEmpty()){
+            int[] top = queue.poll();
+            int price = top[0];
+            int start=top[1];
+            int end = top[2];
+            if(start==dst)
+                return price;
+            if(end>0){
+                Map<Integer,Integer> adj = map.getOrDefault(start, new HashMap<>());
+                for(int a: adj.keySet()){
+                    queue.add(new int[]{price+adj.get(a),a,end-1});
+                }
+            }
+        }
+        return -1;
+    }
+}
