@@ -1,0 +1,89 @@
+/**
+ * // This is the HtmlParser's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface HtmlParser {
+ *     public List<String> getUrls(String url) {}
+ * }
+ */
+class Solution {
+    public List<String> crawl(String startUrl, HtmlParser htmlParser) {
+        Set<String> res = new HashSet<>();
+        res.add(startUrl);
+        String hostName=getHostName(startUrl);
+        
+        ReentrantLock lock = new ReentrantLock();
+        Semaphore semaphore = new Semaphore(1);
+        
+        Queue<String> queue =new LinkedList<>();
+        queue.offer(startUrl);
+        Thread[] threadPool = new Thread[10];
+       
+        for (int i = 0; i < threadPool.length; i++) {
+            threadPool[i] = new Thread(() -> {
+                while (true) {
+                    try {
+                        semaphore.tryAcquire(100, TimeUnit.MILLISECONDS);
+                        lock.lock();
+                        if (queue.isEmpty()) {
+                            lock.unlock();
+                            break;
+                        }
+                        String url = queue.poll();
+                        lock.unlock();
+                        Set<String> urlsFromCrawl = findURL(url, hostName, htmlParser);
+                        lock.lock();
+                        for (String siteURL : urlsFromCrawl) {
+                            if (!res.contains(siteURL)) {
+                                res.add(siteURL);
+                                queue.offer(siteURL);
+                                semaphore.release();
+                            }
+                        }
+                        lock.unlock();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        
+        for(Thread thread:  threadPool){
+            thread.start();
+        }
+        
+        for(Thread thread: threadPool){
+            try{
+                thread.join();
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        return new ArrayList<String>(res);
+    }
+    
+    private Set<String> findURL(String url, String hostName, HtmlParser htmlParser){
+        List<String> urlSet = htmlParser.getUrls(url);
+        Set<String> res = new HashSet<>();
+        for(String temp: urlSet){
+            if(getHostName(temp).equals(hostName)){
+                res.add(temp);
+            }
+        }
+        return res;
+        
+    }
+    
+    
+    private String getHostName(String str){
+        if(str==null  || str.length()==0){
+            return str;
+        }
+        if(str.startsWith("http://")){
+            str=str.substring(7);
+        }else if(str.startsWith("https://")){
+            str=str.substring(8);
+        }
+        
+        return str.split("/")[0];
+    }
+}
