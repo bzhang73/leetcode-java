@@ -1,0 +1,47 @@
+/**
+ * // This is the HtmlParser's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface HtmlParser {
+ *     public List<String> getUrls(String url) {}
+ * }
+ */
+class Solution {
+    public List<String> crawl(String startUrl, HtmlParser htmlParser) {
+        Set<String> set = new HashSet<>();
+        set.add(startUrl);
+        int length=-1;
+        for(int i=7;i<startUrl.length();i++)
+            if(startUrl.charAt(i)=='/'){
+                length=i;
+                break;
+            }
+        if(length==-1)
+            length=startUrl.length();
+        
+        Queue<String> queue = new LinkedList<>();
+        queue.add(startUrl);
+        
+        List<String> res = new ArrayList<>();
+        res.add(startUrl);
+        // System.out.println(startUrl);
+        
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int k=0;k<size;k++){
+                String temp=queue.poll();
+                List<String> list = htmlParser.getUrls(temp);
+                for(String str: list){
+                    if(!set.contains(str)){
+                        set.add(str);
+                        if(str.length()>=length && startUrl.substring(0,length).equals(str.substring(0,length))){
+                            res.add(str);
+                            // System.out.println(str);
+                            queue.offer(str);
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
