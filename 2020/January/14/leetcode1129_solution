@@ -1,0 +1,70 @@
+class Solution {
+    public int[] shortestAlternatingPaths(int n, int[][] red_edges, int[][] blue_edges) {
+        if(n==1)
+            return new int[]{0};
+        
+        List[] red=new ArrayList[n];
+        List[] blue=new ArrayList[n];
+        for(int i=0;i<n;i++){
+            red[i]=new ArrayList<>();
+            blue[i]=new ArrayList<>();
+        }
+        
+        for(int i=0;i<red_edges.length;i++){
+            red[red_edges[i][0]].add(red_edges[i][1]);
+        }
+        for(int i=0;i<blue_edges.length;i++){
+            blue[blue_edges[i][0]].add(blue_edges[i][1]);
+        }
+        
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[] red_visited=new boolean[n];
+        boolean[] blue_visited=new boolean[n];
+        
+        int[] res = new int[n];
+        Arrays.fill(res,-1);
+        res[0]=0;
+        int step=1;
+        
+        queue.offer(new int[]{0,0});
+        red_visited[0]=true;
+        queue.offer(new int[]{0,1});
+        blue_visited[0]=true;
+        
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp=queue.poll();
+                // System.out.println(temp[0]+" "+temp[1]+" "+step);
+                if(temp[1]==0){
+                    for(int j=0;j<red[temp[0]].size();j++){
+                        int a=(int)red[temp[0]].get(j);
+                        if(!red_visited[a]){
+                            queue.add(new int[]{a,1});
+                            red_visited[a]=true;
+                            if(res[a]!=-1){
+                                res[a]=Math.min(res[a],step);
+                            }else
+                                res[a]=step;
+                        }
+                    }
+                }else if(temp[1]==1){
+                    for(int j=0;j<blue[temp[0]].size();j++){
+                        int a=(int)blue[temp[0]].get(j);
+                        // System.out.println(a);
+                        if(!blue_visited[a]){
+                            queue.add(new int[]{a,0});
+                            blue_visited[a]=true;
+                            if(res[a]!=-1){
+                                res[a]=Math.min(res[a],step);
+                            }else
+                                res[a]=step;
+                        }
+                    }
+                }
+            }
+            step++;
+        }
+        return res;
+    }
+}
