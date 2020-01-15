@@ -1,0 +1,60 @@
+class Solution {
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        Queue<int[]> queue =new LinkedList<>();
+        queue.add(start);
+        int m=maze.length;
+        int n=maze[0].length;
+        boolean[][] visited=new boolean[m][n];
+        visited[start[0]][start[1]]=true;
+        
+        int[] direction= new int[]{0,1,2,3};
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int k=0;k<size;k++){
+                int[] temp=queue.poll();
+                for(int i=0;i<direction.length;i++){
+                    int[] a=findDirection(maze,temp[0], temp[1], direction[i]);
+                    if(!visited[a[0]][a[1]]){
+                        if(a[0]==destination[0] && a[1]==destination[1])
+                            return true;
+                        queue.offer(a);
+                        visited[a[0]][a[1]]=true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    private int[] findDirection(int[][] maze, int x, int y, int direction){
+        int[] res = new int[2];
+        if(direction==0){
+            while(x>0){
+                if(maze[x-1][y]==1)
+                    break;
+                x--;
+            }
+        }else if(direction==1){
+            while(x<maze.length-1){
+                if(maze[x+1][y]==1)
+                    break;
+                x++;
+            }
+        }else if(direction==2){
+            while(y>0){
+                if(maze[x][y-1]==1)
+                    break;
+                y--;
+            }
+        }else if(direction==3){
+            while(y<maze[0].length-1){
+                if(maze[x][y+1]==1)
+                    break;
+                y++;
+            }
+        }
+        res[0]=x;
+        res[1]=y;
+        return res;
+    }
+}
