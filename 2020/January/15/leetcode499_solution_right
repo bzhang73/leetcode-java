@@ -1,0 +1,131 @@
+public class Solution {
+    class Node {
+        String path;
+        int score;
+        int i , j;
+        
+        public Node(int i,int j, int value, String path){
+            this.i = i;
+            this.j = j;
+            this.score = value;
+            this.path = path;
+        }
+    }
+    public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
+        if(maze == null || maze.length == 0) return "impossible";
+        Queue<Node> q= new LinkedList<>();
+        Node start = new Node(ball[0], ball[1], 0, "");
+        q.add(start);
+        List<Node> reached = new ArrayList<>();
+        int minScore = maze.length*maze[0].length;
+        int map[][] = new int[maze.length][maze[0].length];
+        for(int row[]:map){
+            Arrays.fill(row, minScore);
+        }
+        while(!q.isEmpty()){
+                Node node = q.poll();
+                if(node.i == hole[0] && node.j == hole[1]) {
+                    reached.add(node);
+                    minScore = Math.min(node.score, minScore);
+                    continue;
+                }
+                if(node.score>minScore || node.score > map[node.i][node.j]) continue;
+                map[node.i][node.j] = node.score;
+                if(node.path.isEmpty()){ // if it is starting point
+                     Node down = getDownNode(node,maze, hole);
+                    if(down != null && down.score <=minScore) q.add(down);
+                    Node left = getLeftNode(node, maze, hole);
+                    if(left != null && left.score <= minScore) q.add(left);
+                    Node up = getUpNode(node, maze, hole);
+                    if(up != null && up.score<=minScore) q.add(up);
+                    Node right = getRightNode(node, maze, hole);
+                    if(right != null && right.score <=minScore) q.add(right);
+                } else {
+                    switch(node.path.charAt(node.path.length()-1)){ // get the last direction
+                        case 'r':case 'l':{
+                            Node down = getDownNode(node,maze, hole);
+                            if(down != null && down.score<=minScore) q.add(down);
+                            Node up = getUpNode(node, maze, hole);
+                            if(up != null && up.score<=minScore) q.add(up);
+                        }break;
+                        case 'd': case 'u':{
+                            Node left = getLeftNode(node, maze, hole);
+                            if(left != null && left.score<=minScore) q.add(left);
+                            Node right = getRightNode(node, maze, hole);
+                            if(right != null && right.score<=minScore) q.add(right);
+                        }break;
+                        
+                    }
+                }
+
+        }
+        
+        if(reached.isEmpty()) return "impossible";
+        
+        String path = "zzzz";
+        for(Node n:reached){
+            if(n.score == minScore){
+                if(n.path.compareTo(path) <= 0){
+                    path = n.path;
+                }
+            }
+        }
+        return path;
+    }
+    
+    private Node getLeftNode(Node node, int maze[][], int hole[]){
+        int lx  = node.j;
+        int score = node.score;
+        while(lx != 0 && maze[node.i][lx-1] == 0){
+            lx--;
+            score++;
+            if(node.i == hole[0] && lx == hole[1]){
+                return new Node(hole[0], hole[1], score, node.path+"l");
+            }
+        }
+        if(score == node.score) return null;
+        return new Node(node.i, lx, score, node.path+"l");
+    }
+    
+    private Node getRightNode(Node node, int maze[][], int hole[]){
+        int rx = node.j;
+        int score = node.score;
+        while(rx != maze[node.i].length-1 && maze[node.i][rx+1]==0){
+            rx++;
+            score++;
+            if(node.i == hole[0] && rx == hole[1]){
+                return new Node(hole[0], hole[1], score, node.path+"r");
+            }
+        }
+        if(score == node.score) return null;
+        return new Node(node.i, rx, score, node.path+"r");
+    }
+    
+    private Node getDownNode(Node node, int maze[][], int hole[]){
+        int dx = node.i;
+        int score=  node.score;
+        while(dx != maze.length-1 && maze[dx+1][node.j] == 0){
+            dx++;
+            score++;
+            if(dx == hole[0] && node.j == hole[1]){
+                return new Node(hole[0], hole[1], score, node.path+"d");
+            }
+        }
+        if(score == node.score) return null;
+        return new Node(dx, node.j, score, node.path+"d");
+    }
+    
+    private Node getUpNode(Node node, int maze[][], int hole[]){
+        int ux = node.i;
+        int score=  node.score;
+        while(ux != 0 && maze[ux-1][node.j] == 0){
+            ux--;
+            score++;
+            if(ux == hole[0] && node.j == hole[1]){
+                return new Node(hole[0], hole[1], score, node.path+"u");
+            }
+        }
+        if(score == node.score) return null;
+        return new Node(ux, node.j, score, node.path+"u");
+    }
+}
