@@ -1,0 +1,125 @@
+class Solution {
+    class ballPos{
+        int x;
+        int y;
+        int steps;
+        String res;
+        
+        public ballPos(int x, int y, int steps, String res){
+            this.x=x;
+            this.y=y;
+            this.steps=steps;
+            this.res=res;
+        }
+    }
+    public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
+        Queue<ballPos> queue =new LinkedList<>();
+        queue.add(new ballPos(ball[0],ball[1],0,""));
+        int m=maze.length;
+        int n=maze[0].length;
+        // boolean[][] visited=new boolean[m][n];
+        // visited[ball[0]][ball[1]]=true;
+        
+        int[] direction= new int[]{0,1,2,3};
+        
+        int[][] count=new int[m][n];
+        String[][] res=new String[m][n];
+        
+        for(int i=0;i<m;i++)
+            Arrays.fill(count[i],-1);
+        
+        count[ball[0]][ball[1]]=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int k=0;k<size;k++){
+                ballPos temp=queue.poll();
+                for(int i=0;i<direction.length;i++){
+                    int[] a=findDirection(maze,temp.x, temp.y, direction[i], hole);
+                    if(a[0]==temp.x && a[1]==temp.y)
+                        continue;
+                    
+                    // System.out.println(a[0]+" "+a[1]+" "+(temp.steps+a[2])+" "+direction[i]+" "+temp.res);
+                    String newstr=temp.res;
+                    if(count[a[0]][a[1]]==-1 || (temp.steps+a[2])<=count[a[0]][a[1]]){
+                        switch(direction[i]){
+                            case 0:
+                                queue.offer(new ballPos(a[0],a[1],temp.steps+a[2],temp.res+"u"));
+                                newstr=newstr+"u";
+                                break;
+                            case 1:
+                                queue.offer(new ballPos(a[0],a[1],temp.steps+a[2],temp.res+"d"));
+                                newstr=newstr+"d";
+                                break;
+                            case 2:
+                                queue.offer(new ballPos(a[0],a[1],temp.steps+a[2],temp.res+"l"));
+                                newstr=newstr+"l";
+                                break;
+                            case 3:
+                                queue.offer(new ballPos(a[0],a[1],temp.steps+a[2],temp.res+"r"));
+                                newstr=newstr+"r";
+                                break;
+                        }
+                        // System.out.print(newstr+" ");
+                        
+                        count[a[0]][a[1]]=temp.steps+a[2];
+                        if(res[a[0]][a[1]]==null)
+                            res[a[0]][a[1]]=newstr;
+                        else
+                            if(res[a[0]][a[1]].compareTo(newstr)>0)
+                                res[a[0]][a[1]]=newstr;
+                        // System.out.println(res[a[0]][a[1]]);
+                    }
+                }
+            }
+        }
+        // System.out.println(res[hole[0]][hole[1]]+ " "+count[hole[0]][hole[1]]);
+        return res[hole[0]][hole[1]]==null?"impossible":res[hole[0]][hole[1]];
+    }
+    
+     private int[] findDirection(int[][] maze, int x, int y, int direction, int[] hole){
+        int[] res = new int[3];
+        int count=0;
+        if(direction==0){
+            while(x>0){
+                if(maze[x-1][y]==1)
+                    break;
+                x--;
+                count++;
+                if(x==hole[0] && y==hole[1])
+                    break;
+            }
+        }else if(direction==1){
+            while(x<maze.length-1){
+                if(maze[x+1][y]==1)
+                    break;
+                x++;
+                count++;
+                if(x==hole[0] && y==hole[1])
+                    break;
+            }
+        }else if(direction==2){
+            while(y>0){
+                if(maze[x][y-1]==1)
+                    break;
+                y--;
+                count++;
+                if(x==hole[0] && y==hole[1])
+                    break;
+            }
+        }else if(direction==3){
+            while(y<maze[0].length-1){
+                if(maze[x][y+1]==1)
+                    break;
+                y++;
+                count++;
+                if(x==hole[0] && y==hole[1])
+                    break;
+            }
+        }
+        res[0]=x;
+        res[1]=y;
+        res[2]=count;
+        // System.out.println(direction+" "+count);
+        return res;
+    }
+}
