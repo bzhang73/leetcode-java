@@ -1,0 +1,23 @@
+class Solution {
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        Map<Integer,Integer> sum1 = sumTwo(A,B);
+        Map<Integer,Integer> sum2 = sumTwo(C,D);
+        int res=0;
+        for(int a: sum1.keySet())
+            if(sum2.containsKey(-a))
+                res+=(sum1.get(a)*sum2.get(-a));
+        return res;
+    }
+    
+    private Map<Integer,Integer> sumTwo(int[] a, int[] b){
+        Map<Integer,Integer> set= new HashMap<>();
+        for(int i=0;i<a.length;i++){
+            for(int j=0;j<b.length;j++){
+                int sum=a[i]+b[j];
+                set.putIfAbsent(sum,0);
+                set.put(sum, set.get(sum)+1);
+            }
+        }
+        return set;
+    }
+}
