@@ -1,0 +1,22 @@
+class Solution {
+    public int arrangeCoins(int n) {
+        long left=1;
+        long right=n;
+        long sum=(1+right)*right/2;
+        while(left+1<right){
+            long mid =(right-left)/2+left;
+            sum=(mid+1)*mid/2;
+            // System.out.println(sum);
+            if(sum==n){
+                return (int)mid;
+            }else if(sum<n){
+                left=mid;
+            }else
+                right=mid;
+            // System.out.println(mid);
+        }
+        if((right+1)*right/2<=n)
+            return (int)right;
+        return (int)left;
+    }
+}
