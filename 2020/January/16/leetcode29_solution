@@ -1,0 +1,22 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        if (divisor == 1) {
+            return dividend;
+        }
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+        int result = 0;
+        int a1 = Math.abs(dividend);
+        int a2 = Math.abs(divisor);
+        while (a1 - a2 >= 0) {
+            int pow = 0;
+            while (a1 - (a2 << 1 << pow) >= 0) {
+                pow++;
+            }
+            result += 1 << pow;
+            a1 -= a2 << pow;
+        }
+        return (dividend >= 0) == (divisor >= 0) ? result : -result;
+    }
+}
