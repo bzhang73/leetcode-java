@@ -1,0 +1,45 @@
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        PriorityQueue<int[]> queue = new PriorityQueue<int[]>((a,b)->(b[1]-a[1]));
+        for(int a=0;a<arr.length;a++){
+            queue.offer(new int[]{a,Math.abs(arr[a]-x)});
+            if(queue.size()>k+1)
+                queue.poll();
+        }
+        List<Integer> res = new ArrayList<>();
+        if(k==1){
+            int[] temp=queue.poll();
+            if(!queue.isEmpty())
+                temp=queue.poll();
+            res.add(arr[temp[0]]);
+            return res;
+        }
+        int[] temp=queue.poll();
+        // System.out.println(temp[0]+" "+temp[1]+" "+queue.peek()[0]+" "+queue.peek()[1]);
+        if(temp[1]==queue.peek()[1] && temp[0]>queue.peek()[0])
+            temp=queue.poll();
+        else if(temp[1]>queue.peek()[1])
+            temp=queue.poll();
+        
+        int a = temp[0];
+        // System.out.println(a);
+        int count=0;
+        // if(arr[a]==x)
+        //     res.add(x);
+        // else 
+        if(arr[a]>x){
+            a=a-k+1;
+            while(count<k){
+                res.add(arr[a++]);
+                count++;
+            }
+        }else{
+            while(count<k){
+                res.add(arr[a]);
+                count++;
+                a++;
+            }
+        }
+        return res;
+    }
+}
