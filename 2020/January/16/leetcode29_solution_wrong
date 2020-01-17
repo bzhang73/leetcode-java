@@ -1,0 +1,34 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        if(dividend==0 )
+            return 0;
+        if(divisor==1)
+            return dividend;
+        if(divisor==-1)
+            return -dividend;
+        long value=dividend*divisor;
+        divisor=Math.abs(divisor);
+        dividend=Math.abs(dividend);
+        if(dividend<divisor)
+            return 0;
+        int right=Math.abs(divisor);
+        int left=1;
+        while(left+1<right){
+            int mid=(right-left)/2+left;
+            if(mid==0)
+                break;
+            if(dividend/mid == divisor){
+                return (value<0)?-mid:mid;
+            }else if(dividend/mid > divisor){
+                left=mid;
+            }else{
+                right=mid;
+            }
+        }
+        // System.out.println(left+" "+right);
+        if(dividend/left==divisor)
+            return value<0?-left:left;
+        
+        return value<0?-right:right;
+    }
+}
