@@ -1,0 +1,21 @@
+class Solution {
+    public boolean isMajorityElement(int[] nums, int target) {
+        int mid=(nums.length-1)/2;
+        if(nums[mid]!=target)
+            return false;
+        int count=0;
+        int left=mid;
+        while(left>=0 && nums[left]==target){
+            left--;
+            count++;
+        }
+        int right=mid+1;
+        while(right<nums.length && nums[right]==target){
+            left--;
+            count++;
+            if(count>mid)
+                return true;
+        }
+        return count>mid?true:false;
+    }
+}
