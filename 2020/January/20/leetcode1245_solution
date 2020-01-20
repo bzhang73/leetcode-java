@@ -1,0 +1,38 @@
+class Solution {
+    private int max=0;
+    public int treeDiameter(int[][] edges) {
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        Set<Integer> node = new HashSet<>();
+        Set<Integer> all = new HashSet<>();
+        for(int[] a : edges){
+            node.add(a[1]);
+            all.add(a[1]);
+            all.add(a[0]);
+            map.putIfAbsent(a[0],new ArrayList<>());
+            map.get(a[0]).add(a[1]);
+        }
+        all.removeAll(node);
+        List<Integer> list = new ArrayList(all);
+        int root=list.get(0);
+        dfs(root,map);
+        return max;
+    }
+    
+    private int dfs(int root, Map<Integer,List<Integer>> map){
+        if(!map.containsKey(root))
+            return 0;
+        // int maxd=0;
+        List<Integer> list = new ArrayList<>();
+        for(int node: map.get(root)){
+            int d=dfs(node,map);
+            list.add(d+1);
+        }
+        Collections.sort(list,Collections.reverseOrder());
+        if(list.size()>1){
+            max=Math.max(max,list.get(0)+list.get(1));
+        }else
+            max=Math.max(max,list.get(0)+1);
+        return list.get(0);
+    }
+}
+
