@@ -1,0 +1,30 @@
+class Solution {
+    private int[] best=new int[]{-1,-1};
+    public int treeDiameter(int[][] edges) {
+        int n=edges.length;
+        List<Integer>[] graph=new ArrayList[n+1];
+        for(int i=0;i<=n;i++)
+            graph[i]=new ArrayList<>();
+        
+        for(int[] edge: edges){
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
+        }
+        
+        dfs(graph, 0, -1, 0);
+        int from = best[1];
+        best=new int[]{-1,-1};
+        dfs(graph, from,-1,0);
+        return best[0];
+    }
+    
+    private void dfs(List<Integer>[] graph, int node, int parent, int length){
+        if(length>best[0])
+            best=new int[]{length,node};
+        
+        for(int neighbor : graph[node]){
+            if(neighbor != parent)
+                dfs(graph, neighbor, node, length+1);
+        }
+    }
+}
