@@ -1,0 +1,53 @@
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int count=1;
+        int m=board.length;
+        int n=board[0].length;
+        int N=m*n;
+        
+        int res=Integer.MAX_VALUE;
+        
+        for(int i=m-1;i>=0;i--){
+            if(i%2==(m-1)%2){
+                for(int j=0;j<n;j++){
+                    if(board[i][j]!=-1)
+                        map.put(count,board[i][j]);
+                    count++;
+                }
+            }else{
+                for(int j=n-1;j>=0;j--){
+                    if(board[i][j]!=-1)
+                        map.put(count,board[i][j]);
+                    count++;
+                }
+            }
+        }
+        
+        //BFS
+        HashSet<Integer> visited = new HashSet<>();
+        visited.add(1);
+        Queue<int[] > queue=new LinkedList<>();
+        queue.add(new int[]{1,0});
+        while(!queue.isEmpty()){
+            int[] current = queue.poll();
+            int position = current[0];
+            int steps=current[1];
+            
+            if(position == N)
+                res=Math.min(res,steps);
+            else if(position<N && steps<res){
+                for(int i=6;i>0;i--){
+                    int next=position+i;
+                    if(map.containsKey(next))
+                        next=map.get(next);
+                    if(!visited.contains(next) && next<=N && steps+1<res){
+                        visited.add(next);
+                        queue.add(new int[]{next,steps+1});
+                    }
+                }
+            }
+        }
+        return res==Integer.MAX_VALUE?-1:res;
+    }
+}
