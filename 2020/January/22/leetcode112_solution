@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private int total;
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if(root==null)
+            return false;
+        Set<Integer> set = new HashSet<>();
+        total=0;
+        dfs(root, set);
+        return set.contains(sum);
+    }
+    
+    private void dfs(TreeNode root, Set<Integer> set){
+        total+=root.val;
+        if(root.left==null && root.right==null)
+            set.add(total);
+        if(root.left!=null)
+            dfs(root.left, set);
+       if(root.right!=null)
+            dfs(root.right, set);
+        total-=root.val;
+    }
+}
