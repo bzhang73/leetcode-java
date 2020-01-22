@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private PriorityQueue<Integer> queue;
+    public void recoverTree(TreeNode root) {
+        if(root==null)
+            return;
+        queue = new PriorityQueue<Integer>();
+        dfs(root);
+        fillDfs(root);
+    }
+    
+    private void fillDfs(TreeNode root){
+        if(root==null)
+            return;
+        fillDfs(root.left);
+        root.val=queue.poll();
+        fillDfs(root.right);
+    }
+    
+    private void dfs(TreeNode root){
+        if(root==null)
+            return;
+        dfs(root.left);
+        queue.offer(root.val);
+        dfs(root.right);
+    }
+}
