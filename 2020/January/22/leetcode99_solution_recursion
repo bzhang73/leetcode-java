@@ -1,0 +1,69 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void recoverTree(TreeNode root) {
+        if(root==null)
+            return;
+        
+        TreeNode largest=findLargest(root.left, root);
+        TreeNode smallest=findSmallest(root.right,root);
+        
+        if(largest.val>smallest.val){
+            swap(largest, smallest);
+        }else if(smallest.val<root.val){
+            swap(smallest,root);
+        }else if(largest.val>root.val){
+            swap(largest,root);
+        }else{
+            recoverTree(root.left);
+            recoverTree(root.right);
+        }
+    }
+    
+    private void swap(TreeNode a, TreeNode b){
+        int temp=a.val;
+        a.val=b.val;
+        b.val=temp;
+    }
+    
+    private TreeNode findSmallest(TreeNode root, TreeNode min){
+        if(root==null)
+            return min;
+        if(root.val<min.val)
+            min=root;
+        
+        TreeNode left=findSmallest(root.left, min);
+        if(left.val<min.val)
+            min=left;
+        
+        TreeNode right=findSmallest(root.right, min);
+        if(right.val<min.val)
+            min=right;
+        
+        return min;
+    }
+    
+    private TreeNode findLargest(TreeNode root, TreeNode max){
+        if(root==null)
+            return max;
+        if(root.val>max.val)
+            max=root;
+        
+        TreeNode left=findLargest(root.left,max);
+        if(left.val>max.val)
+            max=left;
+        
+        TreeNode right=findLargest(root.right,max);
+        if(right.val>max.val)
+            max=right;
+        
+        return max;
+    }
+}
