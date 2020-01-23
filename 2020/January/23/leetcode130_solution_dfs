@@ -1,0 +1,40 @@
+class Solution {
+    private int[][] direction=new int[][]{{-1,0},{0,-1},{0,1},{1,0}};
+    private int m,n;
+    public void solve(char[][] board) {
+        if(board==null || board.length<=2 || board[0]==null || board[0].length<=2)
+            return;
+        m=board.length;
+        n=board[0].length;
+        
+        boolean[][] visited=new boolean[m][n];
+        for(int i=0;i<m;i++){
+            if(board[i][0]=='O')
+                dfs(board, visited, i, 0);
+            if(board[i][n-1]=='O')
+                dfs(board, visited, i, n-1);
+        }
+        
+        for(int i=1;i<n-1;i++){
+            if(board[0][i]=='O')
+                dfs(board, visited, 0, i);
+            if(board[m-1][i]=='O')
+                dfs(board, visited, m-1, i);
+        }
+        
+        for(int i=1;i<m-1;i++)
+            for(int j=1; j<n-1;j++)
+                if(!visited[i][j])
+                    board[i][j]='X';
+        
+    }
+    
+    private void dfs(char[][] board, boolean[][] visited, int x, int y){
+        if(x<0 || x>=m || y<0 || y>=n || board[x][y]=='X' || visited[x][y])
+            return;
+        visited[x][y]=true;
+        for(int i=0;i<4;i++){
+            dfs(board, visited, x+direction[i][0], y+direction[i][1]);
+        }
+    }
+}
