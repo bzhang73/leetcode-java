@@ -1,0 +1,52 @@
+class Solution {
+    private static String[] Twenty = new String[]{
+        "","One","Two","Three","Four","Five",
+        "Six","Seven","Eight","Nine","Ten",
+        "Eleven","Twelve","Thirteen","Fourteen","Fifteen",
+        "Sixteen","Seventeen","Eighteen","Nineteen"
+    };
+    
+    private static String[] Hundred = new String[]{
+        "","Ten","Twenty","Thirty","Forty","Fifty",
+        "Sixty","Seventy","Eighty","Ninety"
+    };
+    
+    private static String[] Thousand = new String[]{
+        "","Thousand","Million","Billion"
+    } ;
+    
+    public String helper(int num){
+        String result = "";
+        
+        
+        if(num<20){
+            result = Twenty[num];
+        }else if(num<100){
+            result = Hundred[num/10] + " " + Twenty[num%10]; 
+        }else{
+            result = Twenty[num/100] + " Hundred " + helper(num%100);
+        }
+        
+        return result.trim();
+    }
+    
+    public String numberToWords(int num) {
+        if(num==0){
+            return "Zero";
+        }
+        
+        String result="";
+        int i=0;
+        
+        while(num>0){
+            String prev = helper(num%1000);
+            if(prev!=""){
+                result = prev + " " + Thousand[i] +" " + result;
+            }
+            num=num/1000;
+            i++;
+        }
+        
+        return result.trim();
+    }
+}
