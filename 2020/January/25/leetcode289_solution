@@ -1,0 +1,43 @@
+class Solution {
+    public void gameOfLife(int[][] board) {
+        int[] adjx=new int[]{-1,-1,-1,0,0,1,1,1};
+        int[] adjy=new int[]{-1,0,1,-1,1,-1,0,1};
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                int count=0;
+                
+                for(int k=0;k<adjx.length;k++){
+                    int tempx=i+adjx[k];
+                    int tempy=j+adjy[k];
+                    if(!isValid(board,tempx,tempy))
+                        continue;
+                    
+                    if(board[tempx][tempy]==1 || board[tempx][tempy]==2)
+                        count++;
+                }
+                
+                if(board[i][j]==0){
+                    if(count==3)
+                        board[i][j]=3;
+                }else{
+                    if(count<2 || count>3)
+                        board[i][j]=2;
+                }
+            }
+        }
+        
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                board[i][j]%=2;
+            }
+        }
+    }
+    
+    private boolean isValid(int[][] board, int m, int n){
+        if(m<0 || m>=board.length)
+            return false;
+        if(n<0 || n>=board[0].length)
+            return false;
+        return true;
+    }
+}
