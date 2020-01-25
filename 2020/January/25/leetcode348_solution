@@ -1,0 +1,79 @@
+class TicTacToe {
+    private int[][] board;
+    private int length;
+    /** Initialize your data structure here. */
+    public TicTacToe(int n) {
+        board=new int[n][n];
+        for(int i=0;i<n;i++)
+            for(int j=0;j<n;j++)
+                board[i][j]=0;
+        length=n;
+    }
+    
+    /** Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins. */
+    public int move(int row, int col, int player) {
+        board[row][col]=player;
+        
+        boolean res=true;
+        int i=0;
+        for(;i<length;i++)
+            if(board[row][i]!=player){
+                res=false;
+                break;
+            }
+        
+        if(i==length && res==true)
+            return player;
+        
+        res=true;
+        for(i=0;i<length;i++)
+            if(board[i][col]!=player){
+                res=false;
+                break;
+            }
+        
+        if(i==length && res==true)
+            return player;
+        
+        if(row==col || row==length-1-col){
+            res=true;
+            
+            for(i=0;i<length;i++)
+                if(board[i][i]!=player){
+                    res=false;
+                    break;
+                }
+            
+            if(i==length && res==true)
+                return player;
+            
+            res=true;
+            
+            for(i=0;i<length;i++)
+                if(board[i][length-i-1]!=player){
+                    res=false;
+                    break;
+                }
+            
+            
+            if(i==length && res==true)
+                return player;
+        }
+            
+            
+        return 0;
+    }
+}
+
+/**
+ * Your TicTacToe object will be instantiated and called as such:
+ * TicTacToe obj = new TicTacToe(n);
+ * int param_1 = obj.move(row,col,player);
+ */
