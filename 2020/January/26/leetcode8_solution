@@ -1,0 +1,34 @@
+class Solution {
+    public int myAtoi(String str) {
+        if(str==null || str.trim().length()==0)
+            return 0;
+        
+        char[] cs = str.trim().toCharArray();
+        int index=0;
+        if(cs[index]>'9')
+            return 0;
+        
+        boolean negative =false;
+        if(cs[index]=='-'){
+            negative=true;
+            index++;
+        }else if(cs[index]=='+'){
+            index++;
+        }
+        
+        int res=0;
+        while(index<cs.length && cs[index]>='0' && cs[index]<='9'){
+            int val = cs[index]-'0';
+            if(!negative && (-res>Integer.MAX_VALUE/10 || -res*10> Integer.MAX_VALUE-val) ){
+                return Integer.MAX_VALUE;
+            }else if(negative && (res<Integer.MIN_VALUE/10 || res*10<Integer.MIN_VALUE+val)){
+                return Integer.MIN_VALUE;
+            }
+            res=res*10-val;
+            
+            index++;
+        }
+        
+        return negative?res:-res;
+    }
+}
