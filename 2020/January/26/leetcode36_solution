@@ -1,0 +1,58 @@
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        boolean res=true;
+        
+        for(int i=0;i<9;i++)
+            res=res && isRowValid(board,i) && isColValid(board,i);
+        // System.out.println(res);
+        if(!res)
+            return res;
+        for(int i=0;i<9;i+=3){
+            for(int j=0;j<9;j+=3){
+                res=res && isBoxValid(board, i, j);
+            }
+        }
+        return res;
+    }
+    
+    private boolean isBoxValid(char[][] board, int row, int col){
+        boolean[] valid = new boolean[9];
+        for(int i=0;i< 3;i++){
+            for(int j=0;j<3;j++){
+                char c = board[row+i][col+j];
+                if(c=='.')
+                    continue;
+                if(valid[c-'1'])
+                    return false;
+                valid[c-'1']=true;
+            }
+        }
+        return true;
+    }
+    
+    private boolean isRowValid(char[][] board, int row){
+        boolean[] valid = new boolean[9];
+        for(int i=0;i<9;i++){
+            char c = board[row][i];
+            if(c=='.')
+                continue;
+            if(valid[c-'1'])
+                return false;
+            valid[c-'1']=true;
+        }
+        return true;
+    }
+    
+    private boolean isColValid(char[][] board, int col){
+        boolean[] valid = new boolean[9];
+        for(int i=0;i<9;i++){
+            char c = board[i][col];
+            if(c=='.')
+                continue;
+            if(valid[c-'1'])
+                return false;
+            valid[c-'1']=true;
+        }
+        return true;
+    }
+}
