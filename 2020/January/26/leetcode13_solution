@@ -1,0 +1,79 @@
+class Solution {
+    public int romanToInt(String s) {
+        char[] sc= s.toCharArray();
+        int length=sc.length;
+        int index=0;
+        int res=0;
+        while(index<length){
+            switch(sc[index]){
+                case 'I':
+                    if(index==length-1){
+                        res+=1;
+                        index++;
+                    }else{
+                        if(sc[index+1]=='V'){
+                            res+=4;
+                            index+=2;
+                        }else if(sc[index+1]=='X'){
+                            res+=9;
+                            index+=2;
+                        }else{
+                            res+=1;
+                            index++;
+                        }
+                    }
+                    break;
+                case 'V':
+                    res+=5;
+                    index++;
+                    break;
+                case 'X':
+                    if(index==length-1){
+                        res+=10;
+                        index++;
+                    }else{
+                        if(sc[index+1]=='L'){
+                            res+=40;
+                            index+=2;
+                        }else if(sc[index+1]=='C'){
+                            res+=90;
+                            index+=2;
+                        }else{
+                            res+=10;
+                            index++;
+                        }
+                    }
+                    break;
+                case 'L':
+                    res+=50;
+                    index++;
+                    break;
+                case 'C':
+                    if(index==length-1){
+                        res+=100;
+                        index++;
+                    }else{
+                        if(sc[index+1]=='D'){
+                            res+=400;
+                            index+=2;
+                        }else if(sc[index+1]=='M'){
+                            res+=900;
+                            index+=2;
+                        }else{
+                            res+=100;
+                            index++;
+                        }
+                    }
+                    break;
+                case 'D':
+                    res+=500;
+                    index++;
+                    break;
+                case 'M':
+                    res+=1000;
+                    index++;
+            }
+        }
+        return res;
+    }
+}
