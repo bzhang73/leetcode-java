@@ -1,0 +1,38 @@
+class Solution {
+    public String mostCommonWord(String paragraph, String[] banned) {
+        paragraph=paragraph.replace('!',' ');
+        paragraph=paragraph.replace('?',' ');
+        paragraph=paragraph.replace('/',' ');
+        paragraph=paragraph.replace(',',' ');
+        paragraph=paragraph.replace(';',' ');
+        paragraph=paragraph.replace('.',' ');
+        paragraph=paragraph.replace('\'',' ');
+        paragraph=paragraph.toLowerCase();
+        // System.out.println(paragraph);
+        
+        Map<String, Integer> map = new HashMap<>();
+        Set<String> set=new HashSet<>();
+        
+        for(String str: banned)
+            set.add(str);
+        
+        String res = "";
+        int max=0;
+        
+        String[] list = paragraph.split(" ");
+        for(int i=0;i<list.length;i++){
+            if(list[i]==null || list[i].length()==0 || list[i]==" " || set.contains(list[i]))
+                continue;
+            // System.out.print(list[i]+" ");
+            map.putIfAbsent(list[i],0);
+            map.put(list[i],map.get(list[i])+1);
+            if(map.get(list[i])>max){
+                res=list[i];
+                max=map.get(list[i]);
+            }
+            
+            // System.out.println(res+" "+max);
+        }
+        return res;
+    }
+}
