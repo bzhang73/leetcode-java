@@ -1,0 +1,74 @@
+class Solution {
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        List<Integer>[] graph=new ArrayList[n];
+        for(int i=0;i<n;i++)
+            graph[i]=new ArrayList<Integer>();
+        
+        // Map<Integer,Map<Integer,Integer>> connectionsId= new HashMap<>();
+        // buildConnection(connections, connectionsId);
+        
+        buildGraph(graph,connections);
+        
+        List<List<Integer>> res=new ArrayList<>();
+        
+        boolean[] visited = new boolean[n];
+        int[] order=new int[n];
+        int[] unique=new int[1];
+        dfs(graph,-1,0,visited,order,unique,res);
+        
+//         List<Integer> tempres=new ArrayList<>();
+//         for(List<Integer> temp: res){
+//             int node0=temp.get(0);
+//             int node1=temp.get(1);
+//             if(connectionsId.containsKey(node0)){
+//                 if(connectionsId.get(node0).containsKey(node1)){
+//                     tempres.add(connectionsId.get(node0).get(node1));
+//                 }
+//             }
+//         }
+        
+//         for(int tempa: tempres){
+//             System.out.println(tempa);
+//         }
+        
+        return res;
+    }
+    
+    private void dfs(List<Integer>[] graph, int pre, int src, boolean[] visited, int[] order, int[] unique, List<List<Integer>> res){
+        visited[src]=true;
+        order[src]=unique[0]++;
+        int original = order[src];
+        for(int neighbor : graph[src]){
+            if(neighbor==pre)
+                continue;
+            if(!visited[neighbor])
+                dfs(graph,src,neighbor,visited,order,unique,res);
+            order[src]=Math.min(order[src],order[neighbor]);
+            System.out.println(src+" "+ original + " "+ order[src] + "   "+ neighbor + " "+order[neighbor]);
+            if(original<order[neighbor])
+                res.add(Arrays.asList(src,neighbor));
+        }
+    }
+    
+    
+    private void buildGraph(List<Integer>[] graph, List<List<Integer>> connections){
+        for(List<Integer> list: connections){
+            int node0=list.get(0);
+            int node1=list.get(1);
+            graph[node0].add(node1);
+            graph[node1].add(node0);
+        }
+    }
+    
+    // private void buildConnection(List<List<Integer>> connections, Map<Integer,Map<Integer,Integer>> connectionsId){
+    //     for(int i=0;i<connections.size();i++){
+    //         List<Integer> connection=connections.get(i);
+    //         int node0=connection.get(0);
+    //         int node1=connection.get(1);
+    //         connectionsId.putIfAbsent(node0,new HashMap<>());
+    //         connectionsId.get(node0).put(node1,i);
+    //         connectionsId.putIfAbsent(node1,new HashMap<>());
+    //         connectionsId.get(node1).put(node0,i);
+    //     }
+    // }
+}
