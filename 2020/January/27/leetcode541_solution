@@ -1,0 +1,27 @@
+class Solution {
+    public String reverseStr(String s, int k) {
+        char[] sc=s.toCharArray();
+        int left=0;
+        while(left<sc.length){
+            reversek(sc,left,k);
+            left+=2*k;
+        }
+        return new String(sc);
+    }
+    
+    private void reversek(char[] sc, int start,int k){
+        int left=start;
+        int right=start+k-1;
+        if(right>=sc.length)
+            right=sc.length-1;
+        while(left<right){
+            reverse(sc,left++,right--);
+        }
+    }
+    
+    private void reverse(char[] sc,int left,int right){
+        char temp=sc[left];
+        sc[left]=sc[right];
+        sc[right]=temp;
+    }
+}
