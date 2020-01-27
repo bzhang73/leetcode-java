@@ -1,0 +1,26 @@
+class Solution {
+    public String reverseStr(String s, int k) {
+        char[] sc=s.toCharArray();
+        for(int i=0;i<sc.length;i+=2*k){
+            if(i+k-1<=sc.length-1)
+                reverse(sc, i, i+k-1);
+            else
+                reverse(sc, i, sc.length-1);
+        }
+        return String.valueOf(sc);
+    }
+    
+    private void reverse(char[] sc, int left, int right){
+        while(left<right){
+            swap(sc, left, right);
+            left++;
+            right--;
+        }
+    }
+    
+    private void swap(char[] sc, int left, int right){
+        char temp = sc[left];
+        sc[left]=sc[right];
+        sc[right]=temp;
+    }
+}
