@@ -1,0 +1,47 @@
+class Solution {
+    public int numMagicSquaresInside(int[][] grid) {
+        if(grid.length<3 || grid[0].length<3)
+            return 0;
+        int res=0;
+        
+        for(int i=0;i<grid.length-2;i++){
+            for(int j=0;j<grid[i].length-2;j++){
+                if(!valid(grid, i,j))
+                    continue;
+                if(grid[i][j]+grid[i+2][j+2]!=grid[i][j+2]+grid[i+2][j])
+                    continue;
+                int sum=grid[i][j]+grid[i+1][j]+grid[i+2][j];
+                boolean isValid=true;
+                for(int k=0;k<3;k++){
+                    if(grid[i+k][j]+grid[i+k][j+1]+grid[i+k][j+2]!=sum){
+                        isValid=false;
+                        break;
+                    }
+                    if(grid[i][j+k]+grid[i+1][j+k]+grid[i+2][j+k]!=sum){
+                        isValid=false;
+                        break;
+                    }
+                }
+                if(isValid)
+                    res++;
+            }
+        }
+        return res;
+    }
+    
+    private boolean valid(int[][] grid, int x, int y){
+        for(int i=0;i<3;i++){
+            if(grid[x][y+i]<1 || grid[x][y+i]>9)
+                return false;
+            if(grid[x+1][y+i]<1 || grid[x+1][y+i]>9)
+                return false;
+            if(grid[x+2][y+i]<1 || grid[x+2][y+i]>9)
+                return false;
+            if(grid[x+i][y] == grid[x+i][y+1] || grid[x+i][y] == grid[x+i][y+2] || grid[x+i][y+2] == grid[x+i][y+1])
+                return false;
+            if(grid[x][y+i] == grid[x+1][y+i] || grid[x][y+i] == grid[x+2][y+i] || grid[x+2][y+i] == grid[x+1][y+i]) 
+                return false;
+        }
+        return true;
+    }
+}
