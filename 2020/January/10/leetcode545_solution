@@ -1,0 +1,59 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> res = new LinkedList<>();
+        if(root==null)
+            return res;
+        
+        res.add(root.val);
+        preOrder(root.left, res);
+        inOrder(root, root, res);
+        postOrder(root.right, res);
+        return res;
+    }
+    
+    private void postOrder(TreeNode root, List<Integer> res){
+        if(root==null || root.left==root.right)
+            return;
+        // System.out.println("postOrder: " +root.val);
+        
+        if(root.right!=null )
+            postOrder(root.right, res);
+        else 
+            postOrder(root.left, res);
+        // System.out.println("postOrder res: " +root.val);
+        res.add(root.val);
+    }
+    
+    private void inOrder(TreeNode node, TreeNode root, List<Integer> res){
+        if(node==null)
+            return;
+        // System.out.println("inOrder: " +node.val);
+        
+        inOrder(node.left, root, res);
+        if(node.left==node.right && node!=root){
+            // System.out.println("inOrder res: " +node.val);
+            res.add(node.val);
+        }
+        inOrder(node.right, root, res);
+    }
+    
+    private void preOrder(TreeNode root, List<Integer> res){
+        if(root==null || root.left==root.right)
+            return;
+        // System.out.println("preOrder: " +root.val);
+        res.add(root.val);
+        if(root.left!=null)
+            preOrder(root.left, res);
+        else
+            preOrder(root.right, res);
+    }
+}
