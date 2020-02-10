@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> res= new ArrayList<>();
+        if(root==null)
+            return res;
+        DFS(root,res,true,true);
+        return res;
+    }
+    
+    private void DFS(TreeNode root, List<Integer> res, boolean leftmost, boolean rightmost){
+        if(root.left==null && root.right==null){
+            res.add(root.val);
+            return ;
+        }
+        
+        if(leftmost)
+            res.add(root.val);
+        
+        boolean left=false;
+        boolean right=false;
+        
+        if(!leftmost && root.right==null){
+            right=rightmost; 
+        }
+        if(!rightmost && root.left==null){
+            left=leftmost;
+        }
+        
+        if(root.left!=null)
+            DFS(root.left,res,left,right);
+        if(root.right!=null)
+            DFS(root.right,res,left,right);
+        
+        if(!leftmost && rightmost)
+            res.add(root.val);
+    }
+}
