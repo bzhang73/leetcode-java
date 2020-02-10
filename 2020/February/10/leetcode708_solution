@@ -1,0 +1,80 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node next;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, Node _next) {
+        val = _val;
+        next = _next;
+    }
+};
+*/
+class Solution {
+    public Node insert(Node head, int insertVal) {
+        if(head==null){
+            head=new Node(insertVal);
+            head.next=head;
+            return head;
+        }
+        
+        if(head.next==head){
+            head.next=new Node(insertVal);
+            head.next.next=head;
+            return head;
+        }
+        
+        PriorityQueue<int[]> queue = new PriorityQueue<int[]>( (a,b)-> (a[1]-b[1]));
+        Node temp=head;
+        queue.offer(new int[]{temp.val, Math.abs(temp.val-insertVal)});
+        temp=temp.next;
+        while(temp!=head){
+            queue.offer(new int[]{temp.val, Math.abs(temp.val-insertVal)});
+            temp=temp.next;
+        }
+        
+        int a1=queue.poll()[0];
+        while(queue.peek()[0]==a1)
+            queue.poll();
+        int a2=queue.poll()[0];
+        int min=Math.min(a1,a2);
+        int max=Math.max(a1,a2);
+        
+        if(insertVal<min || insertVal>max){
+            while(temp.val<=temp.next.val && temp.next!=head)
+                temp=temp.next;
+            
+            Node next=temp.next;
+            temp.next=new Node(insertVal);
+            temp.next.next=next;
+            return head;
+        }
+        
+        if(max==head.val){
+            
+            while(temp.next!=head){
+                temp=temp.next;
+            }
+            
+            Node next=temp.next;
+            temp.next=new Node(insertVal);
+            temp.next.next=next;
+            return head;
+        }
+        
+        while(temp.val!=min){
+            temp=temp.next;
+        }
+        
+        Node next=temp.next;
+        temp.next=new Node(insertVal);
+        temp.next.next=next;
+        return head;
+    }
+}
