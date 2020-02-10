@@ -1,0 +1,45 @@
+class Solution {
+    public int[] exclusiveTime(int n, List<String> logs) {
+        int[] res= new int[n];
+        int prev=0;
+        int prevNum=-1;
+        Stack<Integer> stack=new Stack<>();
+        for(int i=0;i<logs.size();i++){
+            String temp=logs.get(i);
+            String[] list=temp.split(":");
+            int num=0;
+            for(int j=0;j<list[0].length();j++){
+                num=num*10+(list[0].charAt(j)-'0');
+            }
+            int time=0;
+            for(int j=0;j<list[2].length();j++){
+                time=time*10+(list[2].charAt(j)-'0');
+            }
+            
+            if(list[1].equals("start")){
+                if(prevNum!=-1){
+                    if(prevNum==num)
+                        res[stack.peek()]+=time-prev;
+                    else
+                        res[stack.peek()]+=time-prev-1;
+                    // System.out.println("start"+" "+prevNum+" "+stack.peek()+" "+res[stack.peek()]);
+                }               
+
+                stack.push(num);
+                prevNum=num;
+                prev=time;
+            }else if(list[1].equals("end")){
+                if(num==prevNum)
+                    res[num]+=time-prev+1;
+                else
+                    res[num]+=time-prev;
+                // System.out.println("end"+" "+prevNum+" "+num+" "+res[num]);
+                prev=time;
+                prevNum=num;
+                stack.pop();
+            }
+        }
+        
+        return res;
+    }
+}
