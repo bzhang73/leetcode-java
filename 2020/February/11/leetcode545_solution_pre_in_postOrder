@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if(root==null)
+            return res;
+        
+        res.add(root.val);
+        preOrder(root.left,res);
+        inOrder(root, root, res);
+        postOrder(root.right, res);
+        
+        return res;
+    }
+    
+    private void postOrder(TreeNode node, List<Integer> res){
+        if(node==null || node.left==node.right)
+            return;
+        
+        if(node.right!=null)
+            postOrder(node.right, res);
+        else
+            postOrder(node.left, res);
+        res.add(node.val);
+    }
+    
+    private void inOrder(TreeNode node, TreeNode root, List<Integer> res){
+        if(node==null)
+            return;
+        
+        inOrder(node.left, root, res);
+        if(node!=root && node.left==node.right)
+            res.add(node.val);
+        inOrder(node.right, root, res);
+    }
+    
+    private void preOrder(TreeNode node, List<Integer> res){
+        if(node==null || node.left==node.right)
+            return;
+        
+        res.add(node.val);
+        if(node.left!=null)
+            preOrder(node.left,res);
+        else
+            preOrder(node.right, res);
+    }
+}
