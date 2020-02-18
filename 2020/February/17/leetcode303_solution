@@ -1,0 +1,36 @@
+class NumArray {
+
+    private Map<Integer,Map<Integer,Integer>> map = new HashMap<>();
+    private int[] num;
+    public NumArray(int[] nums) {
+        num=nums;
+        for(int i=0;i<nums.length;i++){
+            map.putIfAbsent(i, new HashMap<>());
+            map.get(i).put(i, nums[i]);
+        }
+    }
+    
+    public int sumRange(int i, int j) {
+        if(map.get(i).containsKey(j))
+            return map.get(i).get(j);
+        int sum = 0;
+        int temp = i;
+        while(temp<=j){
+            if(map.get(i).containsKey(temp))
+                sum=map.get(i).get(temp);
+            else{
+                sum+=num[temp];
+                map.get(i).put(temp, sum);
+            }
+            temp++;
+        }
+        map.get(i).put(j, sum);
+        return map.get(i).get(j);
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * int param_1 = obj.sumRange(i,j);
+ */
