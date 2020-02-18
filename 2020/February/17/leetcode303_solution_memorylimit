@@ -1,0 +1,25 @@
+class NumArray {
+
+    private int[][] board;
+    public NumArray(int[] nums) {
+        int n = nums.length;
+        board = new int[n][n];
+        for(int i=0;i<n;i++)
+            board[i][i]=nums[i];
+        for(int i=1;i<n;i++){
+            for(int j=0;j<i;j++){
+                board[i][j]=board[i-1][j] + nums[i];
+            }
+        }
+    }
+    
+    public int sumRange(int i, int j) {
+        return board[j][i];
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * int param_1 = obj.sumRange(i,j);
+ */
