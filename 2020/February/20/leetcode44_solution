@@ -1,0 +1,36 @@
+class Solution {
+    public boolean isMatch(String s, String p) {
+        return match(s,0,p,0);
+    }
+    
+    private boolean match(String s, int sindex, String p, int pindex){
+        if(pindex==p.length())
+            return sindex==s.length();
+        
+        
+        if( p.charAt(pindex)=='*'){
+            if(sindex==s.length() && match(s,sindex,p,pindex+1))
+                return match(s,sindex,p,pindex+1);
+            if(sindex==s.length()-1 && match(s,sindex+1,p,pindex+1))
+                return match(s,sindex+1,p,pindex+1);
+            
+            if(sindex>=s.length())
+                return false;
+            
+            if(match(s,sindex+1,p,pindex))
+                return true; 
+            
+            if(pindex<p.length())
+                return match(s,sindex,p,pindex+1) || match(s,sindex+1,p,pindex+1);
+            return false;
+            
+        }else{
+            if(sindex>=s.length())
+                return false;
+            if(p.charAt(pindex)=='?' || p.charAt(pindex)==s.charAt(sindex)){
+                return match(s,sindex+1,p,pindex+1);
+            }
+            return false;
+        }
+    }
+}
