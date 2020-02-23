@@ -1,0 +1,34 @@
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>();
+        int maxLength=0;
+        
+        for(String a:wordDict){
+            maxLength = Math.max(maxLength, a.length());
+            set.add(a);
+        }
+        
+        List<String> res = new ArrayList<>();
+        
+        dfs(s, set, maxLength, 0, "", res);
+        
+        return res;
+    }
+    
+    private void dfs(String s, Set<String> set, int maxLength, int start, String str, List<String> res){
+        
+        if(start>=s.length()){
+            res.add(str.trim());
+            return ;
+        }
+        
+        for(int i=start+1;i<=s.length() && i-start<=maxLength+1;i++){
+            if(set.contains(s.substring(start, i))){
+                dfs(s, set, maxLength, i, str+s.substring(start,i)+" ", res);
+            }
+        }
+        
+    }
+    
+    
+}
