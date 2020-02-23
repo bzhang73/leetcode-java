@@ -1,0 +1,40 @@
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> res = new ArrayList<>();
+        if(s==null || s.length()==0)
+            return res;
+        
+        int n = s.length();
+        boolean[][] isPalindrome = new boolean[n][n];
+        
+        for(int i=0;i<n;i++)
+            isPalindrome[i][i]=true;
+        for(int i=0;i<n-1;i++)
+            if(s.charAt(i)==s.charAt(i+1))
+                isPalindrome[i][i+1]=true;
+        for(int i=n-3;i>=0;i--){
+            for(int j=i+2;j<n;j++){
+                if(s.charAt(j)==s.charAt(i))
+                    isPalindrome[i][j]=isPalindrome[i+1][j-1];
+            }
+        }
+        
+        dfs(s, isPalindrome,0,new ArrayList<String>(), res);
+        return res;
+    }
+    
+    private void dfs(String s, boolean[][] isPalindrome, int start, List<String> combination, List<List<String>> res){
+        if(start==isPalindrome.length){
+            res.add(new ArrayList<String>(combination));
+            return;
+        }
+        
+        for(int i=start;i<isPalindrome.length;i++){
+            if(isPalindrome[start][i]){
+                combination.add(s.substring(start,i+1));
+                dfs(s, isPalindrome, i+1, combination, res);
+                combination.remove(combination.size()-1);
+            }
+        }
+    }
+}
