@@ -1,0 +1,35 @@
+class Solution {
+    public int stoneGameII(int[] piles) {
+        for(int i=1;i<piles.length;i++)
+            piles[i]=piles[i-1]+piles[i];
+        
+        Map<String, Integer> map = new HashMap<>();
+        return dfs(1,0, piles, map);
+    }
+    
+    private int dfs(int M, int round, int[] piles, Map<String, Integer> map){
+        if(round==piles.length)
+            return 0;
+        if(map.containsKey(M+" "+round))
+            return map.get(M+" "+round);
+        
+        int max=-1;
+        int preSum = round==0? 0: piles[round-1];
+        
+        for(int i=0;i<=2*M-1;i++){
+            if(round+i==piles.length)
+                break;
+            int next = dfs(Math.max(M,i+1), round+i+1, piles, map);
+            int count = next+piles[i+round]-preSum;
+            
+            max = Math.max(max, count);
+        }
+        
+        int nextVal = piles[piles.length-1]-max-preSum;
+        map.put(M+" "+round, nextVal);
+        if(round==0)
+            return max;
+        return nextVal;
+        
+    }
+}
