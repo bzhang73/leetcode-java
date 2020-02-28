@@ -1,0 +1,72 @@
+class Solution {
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        if(pairs.size()==0)
+            return s;
+        Map<Integer, Set<Integer> > table = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
+        int count=0;
+        
+        for(int i=0;i<pairs.size();i++){
+            int a = pairs.get(i).get(0);
+            int b = pairs.get(i).get(1);
+            if(!map.containsKey(a) && !map.containsKey(b)){
+                table.put(count, new HashSet());
+                table.get(count).add(a);
+                table.get(count).add(b);
+                
+                map.put(a,count);
+                map.put(b,count);
+                set.add(count);
+                count++;
+            }else if(map.containsKey(a) && map.containsKey(b)){
+                if(map.get(a)==map.get(b))
+                    continue;
+                int min = Math.min(map.get(a),map.get(b));
+                if(min==map.get(a)){
+                    set.remove(map.get(b));
+                    Set<Integer> list = table.get(map.get(b)); 
+                    for(int temp: list){
+                        map.put(temp, min);
+                        table.get(min).add(temp);
+                    }
+                }else{
+                    set.remove(map.get(a));
+                    Set<Integer> list = table.get(map.get(a)); 
+                    for(int temp: list){
+                        map.put(temp, min);
+                        table.get(min).add(temp);
+                    }
+                }
+            }else if(map.containsKey(a)){
+                table.get(map.get(a)).add(b);
+                
+                map.put(b, map.get(a));
+            }else if(map.containsKey(b)){
+                table.get(map.get(b)).add(a);
+                
+                map.put(a, map.get(b));
+            }
+        }
+        
+        PriorityQueue<Integer> queue =  new PriorityQueue<Integer>((a,b)->(a-b));
+        PriorityQueue<Character> charqueue = new PriorityQueue<Character>((a,b)->(a-b));
+        
+        char[] sc = s.toCharArray();
+        for(int a: set){
+            Set<Integer> list = table.get(a);
+            for(int temp: list){
+                queue.add(temp);
+                charqueue.add(sc[temp]);
+            }
+            while(!queue.isEmpty()){
+                int temp = queue.poll();
+                char tempchar = charqueue.poll();
+                // System.out.println(a+" "+temp+" "+tempchar);
+                sc[temp]=tempchar;
+            }
+        }
+        
+        return new String(sc);
+    }
+}
