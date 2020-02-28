@@ -1,0 +1,44 @@
+class Solution {
+    public String decodeString(String s) {
+        if(s==null)
+            return null;
+        StringBuilder sb = new StringBuilder();
+        Stack<String>  stack = new Stack<>();
+        Stack<Integer> time = new Stack<>();
+        int number=0;
+        
+        for(char a : s.toCharArray()){
+            if(a>='0' && a<='9'){
+                number = number*10+(int)(a-'0');
+            }else if(a=='['){
+                time.push(number);
+                stack.push("[");
+                number=0;
+            }else if(a==']'){
+                String newString = decode(stack);
+                int times = time.pop();
+                while(times>0){
+                    stack.push(newString);
+                    times--;
+                }
+            }else{
+                stack.push(String.valueOf(a));
+            }
+        }
+        return decode(stack);
+    }
+    
+    private String decode(Stack<String> stack){
+        Stack<String> buffer = new Stack<>();
+        while(!stack.isEmpty() && !stack.peek().equals("[")){
+            buffer.push(stack.pop());
+        }
+        if(!stack.isEmpty() && stack.peek().equals("["))
+            stack.pop();
+        StringBuilder sb = new StringBuilder();
+        while(!buffer.isEmpty()){
+            sb.append(buffer.pop());
+        }
+        return sb.toString();
+    }
+}
