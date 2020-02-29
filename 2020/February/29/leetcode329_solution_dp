@@ -1,0 +1,41 @@
+class Solution {
+    private int m,n;
+    private int[][] direction = new int[][]{{-1,0},{0,-1},{0,1},{1,0}};
+    public int longestIncreasingPath(int[][] matrix) {
+        if(matrix==null || matrix.length==0 || matrix[0]==null || matrix[0].length==0)
+            return 0;
+        
+        m = matrix.length;
+        n = matrix[0].length;
+        
+        int[][] dp = new int[m][n];
+        int res = 1;
+        
+        for(int i=0;i<m;i++)
+            for(int j=0;j<n;j++){
+                int len = dfs(matrix, dp, i, j);
+                res = Math.max(len, res);
+            }
+
+        
+        return res;
+    }
+    
+    private int dfs(int[][] matrix, int[][] dp, int x, int y){
+        if(dp[x][y]!=0)
+            return dp[x][y];
+        int res=1;
+        
+        for(int[] direct : direction){
+            int nextx = x+direct[0];
+            int nexty = y+direct[1];
+            if(nextx<0 || nextx>=m || nexty<0 || nexty>=n || matrix[x][y]>= matrix[nextx][nexty])
+                continue;
+            int len = dfs(matrix, dp, nextx, nexty)+1;
+            res = Math.max(res, len);
+        }
+        
+        dp[x][y]=res;
+        return dp[x][y];
+    }
+}
