@@ -1,0 +1,45 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        Stack<Integer> stack = new Stack<>();
+        Stack<Integer> stack2 = new Stack<>();
+        Stack<Integer> res = new Stack<>();
+        
+        ListNode dummy = new ListNode(0);
+        
+        while(l1!=null){
+            stack.push(l1.val);
+            l1=l1.next;
+        }
+        while(l2!=null){
+            stack2.push(l2.val);
+            l2=l2.next;
+        }
+        
+        int rest=0;
+        while(!stack.isEmpty() || !stack2.isEmpty()){
+            int a = stack.isEmpty()? 0:stack.pop();
+            int b = stack2.isEmpty()? 0:stack2.pop();
+            
+            int sum=a+b+rest;
+            rest=sum/10;
+            res.push(sum%10);
+        }
+        if(rest!=0)
+            res.push(rest);
+        
+        ListNode tail = dummy;
+        while(!res.isEmpty()){
+            tail.next = new ListNode(res.pop());
+            tail = tail.next;
+        }
+        return dummy.next;
+    }
+}
