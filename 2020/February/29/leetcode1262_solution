@@ -1,0 +1,41 @@
+class Solution {
+    public int maxSumDivThree(int[] nums) {
+        Arrays.sort(nums);
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        PriorityQueue<Integer> res = new PriorityQueue<>();
+        if(nums[0]%3!=0)
+            queue.add(nums[0]);
+        
+        for(int i=1;i<nums.length;i++){
+            if(nums[i]%3!=0)
+                queue.offer(nums[i]);
+            nums[i]+=nums[i-1];
+        }
+        if(nums[nums.length-1]%3==0)
+            return nums[nums.length-1];
+        
+        int[] dp = new int[queue.size()];
+        for(int i=0;i<5 && i<dp.length;i++){
+            dp[i]=queue.poll();
+            res.add(dp[i]);
+        }
+        for(int i=0;i<5 && i<dp.length;i++){
+            int sum=dp[i];
+            for(int j=i+1;j<5 && j<dp.length;j++){
+                if((sum+dp[j])%3==0)
+                    continue;
+                sum+=dp[j];
+                res.add(sum);
+            }
+        }
+        
+        while(!res.isEmpty()){
+            int temp=res.poll();
+            int a = nums[nums.length-1]-temp;
+            if(a%3==0)
+                return a;
+        }
+        
+        return 0;
+    }
+}
