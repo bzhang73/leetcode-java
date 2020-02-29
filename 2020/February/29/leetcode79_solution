@@ -1,0 +1,41 @@
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        if(board==null || board.length<=0 || board[0].length<=0 || word==null || word.length()==0){
+            return false;
+        }
+        
+        int[][] valid = new int[board.length][board[0].length];
+        char[] array = word.toCharArray(); 
+        
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[i].length;j++){
+                if(board[i][j]==array[0]){
+                    boolean result=find(board,i,j,0,array);
+                    if(result){
+                        return result;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+   private boolean find(char[][] board, int i, int j,int start, char[] word){
+        if(start == word.length)
+            return true;
+        
+        if (i < 0 || i>= board.length || 
+     j < 0 || j >= board[0].length || board[i][j] != word[start]){
+            return false;
+     }
+        
+        board[i][j] = '#'; // should remember to mark it
+        boolean rst = find(board, i-1, j, start+1, word) 
+|| find(board, i, j-1,  start+1, word) 
+|| find(board, i+1, j,  start+1, word) 
+|| find(board, i, j+1,  start+1, word);
+        board[i][j] = word[start];
+        return rst;
+    }
+}
