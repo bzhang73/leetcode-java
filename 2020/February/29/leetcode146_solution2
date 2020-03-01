@@ -1,0 +1,68 @@
+class LRUCache {
+    private Map<Integer, Integer> map ;
+    private ListNode cache;
+    private Set<Integer> set;
+    private int size;
+
+    public LRUCache(int capacity) {
+        size = capacity;
+        map = new HashMap<>();
+        set = new HashSet<>();
+        cache = new ListNode(0);
+    }
+    
+    public int get(int key) {
+        if(size==0 || !set.contains(key))
+            return -1;
+        
+        ListNode list = cache;
+        while(list.next.val!=key){
+            list=list.next;
+        }
+        list.next=list.next.next;
+        ListNode temp = cache.next;
+        cache.next = new ListNode(key);
+        cache.next.next=temp;
+        
+        return map.get(key);
+    }
+    
+    public void put(int key, int value) {
+        if(size==0)
+            return;
+        ListNode list = cache;
+        if(set.contains(key)){
+            while(list.next.val!=key){
+                list=list.next;
+            }
+            list.next=list.next.next;
+            ListNode temp = cache.next;
+            cache.next = new ListNode(key);
+            cache.next.next=temp;
+            map.put(key,value);
+        }else if(set.size()<size ){
+            ListNode temp = cache.next;
+            cache.next = new ListNode(key);
+            cache.next.next=temp;
+            map.put(key,value);
+            set.add(key);
+        }else{
+            while(list.next.next!=null)
+                list=list.next;
+            set.remove(list.next.val);
+            list.next=null;
+            ListNode temp = cache.next;
+            cache.next=new ListNode(key);
+            set.add(key);
+            map.put(key, value);
+            cache.next.next=temp;
+        }
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
