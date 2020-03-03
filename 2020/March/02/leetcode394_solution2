@@ -1,0 +1,41 @@
+class Solution {
+    public String decodeString(String s) {
+        if(s==null)
+            return s;
+        Stack<Object > stack = new Stack<>();
+        
+        int num=0;
+        
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)>='0' && s.charAt(i)<='9'){
+                num = num *10 +(int)(s.charAt(i)-'0');
+            }else if(s.charAt(i)=='['){
+                stack.push((Integer)num);
+                num=0;
+            }else if(s.charAt(i)==']'){
+                String newstr = reverseString(stack);
+                Integer time =(Integer) stack.pop();
+                while(time>0){
+                    stack.push(newstr);
+                    time--;
+                }
+            }else{
+                stack.push(s.substring(i,i+1));
+            }
+        }
+        
+        return reverseString(stack);
+    }
+    
+    private String reverseString(Stack<Object> stack ){
+        StringBuilder sb = new StringBuilder();
+        Stack<String> s1 = new Stack<>();
+        while(!stack.isEmpty()  &&  (stack.peek() instanceof String)){
+            s1.push((String)stack.pop());
+        }
+        while(!s1.isEmpty()){
+            sb.append(s1.pop());
+        }
+        return sb.toString();
+    }
+}
