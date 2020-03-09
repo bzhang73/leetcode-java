@@ -1,0 +1,71 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(root==null)
+            return res;
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        Queue<Integer> order = new LinkedList<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        
+        queue.offer(root);
+        order.offer(0);
+        int min=0;
+        int max=0;
+        
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            int levelMin = Integer.MAX_VALUE;
+            int levelMax = Integer.MIN_VALUE;
+            Map<Integer, List<Integer>> levelMap = new HashMap<>();
+            
+            for(int i=0;i<size;i++){
+                TreeNode node = queue.poll();
+                int nodeOrder = order.poll();
+                
+                min = Math.min(min, nodeOrder);
+                max = Math.max(max, nodeOrder);
+                levelMin = Math.min(levelMin, nodeOrder);
+                levelMax = Math.max(levelMax, nodeOrder);
+                
+                levelMap.putIfAbsent(nodeOrder, new ArrayList<>());
+                levelMap.get(nodeOrder).add(node.val);
+                
+                if(node.left!=null){
+                    queue.offer(node.left);
+                    order.offer(nodeOrder-1);
+                }
+                
+                if(node.right!=null){
+                    queue.offer(node.right);
+                    order.offer(nodeOrder+1);
+                }
+            }
+            
+            for(int i=levelMin;i<=levelMax;i++){
+                if(!levelMap.containsKey(i))
+                    continue;
+                
+                Collections.sort(levelMap.get(i));
+                map.putIfAbsent(i, new ArrayList<>());
+                map.get(i).addAll(levelMap.get(i));
+            }
+        }
+        
+        for(int i=min;i<=max;i++){
+            if(!map.containsKey(i))
+                continue;
+            res.add(map.get(i));
+        }
+        return res;
+    }
+}
