@@ -1,0 +1,31 @@
+class Solution {
+    public int trap(int[] height) {
+        if(height==null || height.length<3){
+            return 0;
+        }
+        int left=0;
+        int right=height.length-1;
+        int leftHeight = height[left];
+        int rightHeight= height[right];
+        int res=0;
+        
+        while(left<right){
+            if(leftHeight<rightHeight){
+                left++;
+                if(height[left]>leftHeight){
+                    leftHeight=height[left];
+                }else{
+                    res+=leftHeight-height[left];
+                }
+            }else{
+                right--;
+                if(height[right]>rightHeight){
+                    rightHeight= height[right];
+                }else{
+                    res+=rightHeight-height[right];
+                }
+            }
+        }
+        return res;
+    }
+}
