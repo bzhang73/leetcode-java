@@ -1,0 +1,38 @@
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>();
+        
+        for(String a:wordDict){
+            set.add(a);
+        }
+        
+        List<String> res = new ArrayList<>();
+        
+        boolean flag = dfs(s, set, 0, "", res, new boolean[s.length()+1]);
+        
+        return res;
+    }
+    
+    private boolean dfs(String s, Set<String> set , int start, String str, List<String> res, boolean[] valid){
+        if(start>=s.length()){
+            res.add(str.trim());
+            return true;
+        }
+        
+        boolean possible = false;
+        for(int i=start+1;i<=s.length();i++){
+            if(valid[i])
+                continue;
+            String key = s.substring(start, i);
+            if(set.contains(key)){
+                boolean flag = dfs(s, set, i, str+key+" ", res, valid);
+                possible = possible|| flag;
+            }
+            
+        }
+        valid[start]=!possible;
+        return possible;
+    }
+    
+    
+}
