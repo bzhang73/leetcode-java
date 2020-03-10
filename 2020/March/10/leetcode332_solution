@@ -1,0 +1,33 @@
+class Solution {
+    public List<String> findItinerary(List<List<String>> tickets) {
+        List<String> res = new ArrayList<>();
+        if(tickets==null || tickets.size()==0)
+            return res;
+        
+        Map<String, PriorityQueue<String>> map = new HashMap<>();
+        for(int i=0;i<tickets.size();i++){
+            PriorityQueue<String> queue = new PriorityQueue<>();
+            String start = tickets.get(i).get(0);
+            String dest = tickets.get(i).get(1);
+            if(map.containsKey(start)){
+                queue=map.get(start);
+            }
+            
+            queue.offer(dest);
+            map.put(start, queue);
+        }
+        String start = "JFK";
+        
+        dfs(map, res, start);
+        return res;
+    }
+    
+    private void dfs(Map<String, PriorityQueue<String>> map, List<String> res, String start){
+        PriorityQueue<String> queue = map.get(start);
+        while(queue!=null && !queue.isEmpty()){
+            String next = queue.poll();
+            dfs(map, res, next);
+        }
+        res.add(0, start);
+    }
+}
