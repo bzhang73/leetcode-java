@@ -1,0 +1,36 @@
+class NumArray {
+    int dp[];
+    int re[];
+    public NumArray(int[] nums) {
+        dp=nums;
+        re=new int[nums.length];
+        int sum=0;
+        for(int i=0;i<nums.length;i++){
+            re[i]=nums[i];
+            dp[i]+=sum;
+            sum=dp[i];
+        }
+    }
+    
+    public void update(int i, int val) {
+        int dif=val-re[i];
+        re[i]=val;
+        for(int k=i;k<dp.length;k++){
+            dp[k]+=dif;
+        }
+    }
+    
+    public int sumRange(int i, int j) {
+        if(i==0)
+            return dp[j];
+        else
+            return dp[j]-dp[i-1];
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(i,val);
+ * int param_2 = obj.sumRange(i,j);
+ */
